@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        applicationId "com.pashkobohdan.ttsreader"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding { // problem with JACK option
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/terrakok/terramaven/'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //    JUnit, Mockito
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    //    Support library (recycler view, coordinator layout, etc)
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+
+    //    Data binding
+    //    apply plugin: 'com.android.databinding'
+    //    moxy (mvp)
+    compile 'com.arello-mobile:moxy:1.5.3'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
+    compile 'com.arello-mobile:moxy-android:1.5.3'
+    compile 'com.arello-mobile:moxy-app-compat:1.5.3'
+
+    //    cicerone (navigation)
+    compile 'ru.terrakok.cicerone:cicerone:1.0'
+
+    //    dagger (injection)
+    compile 'com.google.dagger:dagger:2.10'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+
+    //    recycler view (lists)
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+
+    //    butterknife (ui binding)
+    compile 'com.jakewharton:butterknife:8.8.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
+
+    //    RxJava
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
+
+    //    Multi FAB
+    compile 'com.github.clans:fab:1.6.4'
+
+    //    File chooser
+    compile 'yogesh.firzen:FilesLister:1.0.1'
+    compile 'com.android.support:design:26.1.0'
+    compile 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
+
+    implementation "android.arch.persistence.room:runtime:1.0.0-rc1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
+}

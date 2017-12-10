@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">TTS Reader</string>
+    <string name="image_of_book">Image of book</string>
+    <string name="add_book">Add book</string>
+    <string name="add_book_from_file">Open file</string>
+    <string name="add_book_create">Create new</string>
+    <string name="add_book_download">Download from cloud</string>
+
+    <string name="book_progress_label">Progress: %1$s%%</string>
+    <string name="click_again_to_exit">Click again to exit</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="book_editing">Editing a book</string>
+    <string name="book_creating">Creating a book</string>
+
+    <string name="enter_non_emty_book_title">Enter a non-empty title for the book</string>
+    <string name="enter_non_emty_book_text">Enter a non-empty text of the book</string>
+    <string name="book_name_hint">Name of book</string>
+    <string name="book_author_hint">Author of book</string>
+    <string name="book_text_hint">Text of book</string>
+
+    <string name="book_creating_dialog_cancel_confirm">Do you want to cancel creating of the book ? All data will be deleted.</string>
+    <string name="book_editing_dialog_cancel_confirm">Do you want to cancel editing of the book ? All data won\'t be saved.</string>
+
+    <string name="unknown_error">Unknown error</string>
+
+    <string name="file_choosing_dialog_cancel_confirm">Do you want to cancel creating of the book ? All data will be deleted.</string>
+
+</resources>

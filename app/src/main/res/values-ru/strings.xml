@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TTS Reader</string>
+    <string name="image_of_book">Изображение книги</string>
+    <string name="add_book">Добавить книгу</string>
+    <string name="add_book_create">Создать новую</string>
+    <string name="add_book_download">Скачать с облака</string>
+    <string name="add_book_from_file">Открыть файл</string>
+    <string name="book_progress_label">Прогресс: %1$s%%</string>
+    <string name="click_again_to_exit">Нажмите снова для выхода</string>
+    <string name="book_author_hint">Автор книги</string>
+    <string name="book_creating">Создание книги</string>
+    <string name="book_editing">Редактирование книги</string>
+    <string name="book_name_hint">Название книги</string>
+    <string name="book_text_hint">Текст книги</string>
+    <string name="cancel">Отменить</string>
+    <string name="ok">Ок</string>
+    <string name="enter_non_emty_book_title">Введите непустое название книги</string>
+    <string name="enter_non_emty_book_text">Введите непустой текст книги</string>
+</resources>

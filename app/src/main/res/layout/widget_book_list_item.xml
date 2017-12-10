@@ -1,0 +1,50 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="book"
+            type="com.pashkobohdan.ttsreader.model.dto.book.BookDTO" />
+    </data>
+
+    <LinearLayout
+        style="@style/ListItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:scaleType="fitCenter"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/default_book_image_1"
+                android:contentDescription="@string/image_of_book" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{book.author}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{book.name}"/>
+
+                <TextView
+                    android:id="@+id/book_list_item_book_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

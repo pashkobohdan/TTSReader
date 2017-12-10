@@ -1,0 +1,136 @@
+package com.pashkobohdan.ttsreader.model.dto.book;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Entity(tableName = "Book")
+public class BookDTO extends CommonDTO {
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    private String name;
+    private String author;
+    private String text;
+    private Integer length;
+    private String progress;
+    private String createDateString;
+    private String lastOpenDateString;
+
+    public BookDTO() {
+        //Default constructor for Room
+    }
+
+    @Ignore
+    public BookDTO(String name, String author, String text, Integer length, String progress, String createDateString, String lastOpenDateString) {
+        this.name = name;
+        this.author = author;
+        this.text = text;
+        this.length = length;
+        this.progress = progress;
+        this.createDateString = createDateString;
+        this.lastOpenDateString = lastOpenDateString;
+    }
+
+    @Ignore
+    public BookDTO(String name, String author, String text, Integer length, String progress, Date createDate, Date lastOpenDate) {
+        this.name = name;
+        this.author = author;
+        this.text = text;
+        this.length = length;
+        this.progress = progress;
+        setCreateDate(createDate);
+        setLastOpenDate(lastOpenDate);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
+    public String getCreateDateString() {
+        return createDateString;
+    }
+
+    public void setCreateDateString(String createDateString) {
+        this.createDateString = createDateString;
+    }
+
+    public String getLastOpenDateString() {
+        return lastOpenDateString;
+    }
+
+    public void setLastOpenDateString(String lastOpenDateString) {
+        this.lastOpenDateString = lastOpenDateString;
+    }
+
+    public Date getCreateDate() {
+        try {
+            return DATE_FORMAT.parse(createDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();//TODO add slf4j
+            return null;
+        }
+    }
+
+    public Date getLastOpenDate() {
+        try {
+            return DATE_FORMAT.parse(lastOpenDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();//TODO add slf4j
+            return null;
+        }
+    }
+
+    public void setCreateDate(Date date) {
+        createDateString = DATE_FORMAT.format(date);
+    }
+
+    public void setLastOpenDate(Date date) {
+        lastOpenDateString = DATE_FORMAT.format(date);
+    }
+}
