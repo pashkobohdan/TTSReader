@@ -41,6 +41,10 @@ public class BookListItemWidget extends AbstractListItemWidget<BookDTO> {
         ButterKnife.bind(this, binding.getRoot());
         return new AbstractListItemHolder<>(binding.getRoot(), okClickCallback, bookDTO -> {
             binding.setBook(bookDTO);
+            binding.getRoot().setOnLongClickListener(view -> {
+                longClickCallback.call(bookDTO);
+                return true;
+            });
             progress.setText(parent.getContext().getString(R.string.book_progress_label, String.valueOf(55)));//TODO replace with calculating percentage
         });
     }

@@ -4,6 +4,7 @@ import com.pashkobohdan.ttsreader.di.modules.AppModule;
 import com.pashkobohdan.ttsreader.di.modules.DatabaseModule;
 import com.pashkobohdan.ttsreader.di.modules.NavigationModule;
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
+import com.pashkobohdan.ttsreader.ui.fragments.book.BookFragment;
 import com.pashkobohdan.ttsreader.ui.fragments.book.BookListFragment;
 
 import javax.inject.Singleton;
@@ -21,4 +22,6 @@ public interface ApplicationComponent {
     void inject(MainActivity activity);
 
     void inject(BookListFragment fragment);
+
+    void inject(BookFragment fragment);
 }

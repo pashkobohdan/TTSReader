@@ -1,12 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.pashkobohdan.ttsreader"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -33,58 +35,59 @@ repositories {
     maven {
         url 'https://dl.bintray.com/terrakok/terramaven/'
     }
+    mavenCentral()
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //    JUnit, Mockito
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
 
     //    Support library (recycler view, coordinator layout, etc)
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
+    api 'com.android.support:appcompat-v7:27.1.1'
+    api 'com.android.support:design:27.1.1'
+    api 'com.android.support:appcompat-v7:27.1.1'
+    api 'com.android.support:recyclerview-v7:27.1.1'
+    api 'com.android.support:cardview-v7:27.1.1'
 
     //    Data binding
     //    apply plugin: 'com.android.databinding'
     //    moxy (mvp)
-    compile 'com.arello-mobile:moxy:1.5.3'
-    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
-    compile 'com.arello-mobile:moxy-android:1.5.3'
-    compile 'com.arello-mobile:moxy-app-compat:1.5.3'
+    api'com.arello-mobile:moxy:1.5.3'
+    kapt 'com.arello-mobile:moxy-compiler:1.5.3'
+    api'com.arello-mobile:moxy-android:1.5.3'
+    api'com.arello-mobile:moxy-app-compat:1.5.3'
 
     //    cicerone (navigation)
-    compile 'ru.terrakok.cicerone:cicerone:1.0'
+    api 'ru.terrakok.cicerone:cicerone:1.0'
 
     //    dagger (injection)
-    compile 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
-
-    //    recycler view (lists)
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
+    api 'com.google.dagger:dagger:2.10'
+    kapt 'com.google.dagger:dagger-compiler:2.10'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+    api 'javax.inject:javax.inject:1'
 
     //    butterknife (ui binding)
-    compile 'com.jakewharton:butterknife:8.8.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //    RxJava
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
+    api 'io.reactivex:rxjava:1.1.6'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.2'
 
     //    Multi FAB
-    compile 'com.github.clans:fab:1.6.4'
+    api 'com.github.clans:fab:1.6.4'
 
     //    File chooser
-    compile 'yogesh.firzen:FilesLister:1.0.1'
-    compile 'com.android.support:design:26.1.0'
-    compile 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
+    api'yogesh.firzen:FilesLister:1.0.1'
+    api'yogesh.firzen:MukkiyaSevaigal:1.0.6'
 
-    implementation "android.arch.persistence.room:runtime:1.0.0-rc1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
+    implementation "android.arch.persistence.room:runtime:1.1.0-beta3"
+    kapt "android.arch.persistence.room:compiler:1.1.0-beta3"
+    api"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

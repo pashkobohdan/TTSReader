@@ -1,4 +1,4 @@
-package com.pashkobohdan.ttsreader.utils.ui;
+package com.pashkobohdan.ttsreader.ui.dialog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -65,7 +65,7 @@ public class DialogUtils {
                 .show();
     }
 
-    public static <T>void showOptionsDialog(@Nullable String title, @Nullable String text, @NonNull Context context,
+    public static <T>void showOptionsDialog(@Nullable String title, @NonNull Context context,
                                             List<T> items, Func1<T, String> titleProvier, Action1<T> callback,
                                             boolean withCancelButton) {
         List<T> titlesKeys = new ArrayList<>();

@@ -126,6 +126,14 @@ public class BookDTO extends CommonDTO {
         }
     }
 
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
     public void setCreateDate(Date date) {
         createDateString = DATE_FORMAT.format(date);
     }

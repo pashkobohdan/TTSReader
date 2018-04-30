@@ -1,4 +1,6 @@
 package com.pashkobohdan.ttsreader.model.dto.common;
 
-public abstract class CommonDTO {
+import java.io.Serializable;
+
+public abstract class CommonDTO implements Serializable{
 }

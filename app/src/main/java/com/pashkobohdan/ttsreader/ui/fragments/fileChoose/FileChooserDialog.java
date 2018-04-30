@@ -17,7 +17,7 @@ import com.pashkobohdan.ttsreader.model.dto.file.FileDTO;
 import com.pashkobohdan.ttsreader.ui.adapter.AbstractListItemHolder;
 import com.pashkobohdan.ttsreader.ui.common.adapter.AbstractListAdapter;
 import com.pashkobohdan.ttsreader.ui.fragments.fileChoose.widget.FileChoosingItemWidget;
-import com.pashkobohdan.ttsreader.utils.ui.DialogUtils;
+import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils;
 
 import java.io.File;
 import java.io.FileFilter;

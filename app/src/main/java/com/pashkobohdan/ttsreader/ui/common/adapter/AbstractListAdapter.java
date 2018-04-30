@@ -26,6 +26,7 @@ public abstract class AbstractListAdapter<T extends CommonDTO> extends RecyclerV
             dataList = new ArrayList<>();
         }
         dataList.add(data);
+        notifyDataSetChanged();
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.pashkobohdan.ttsreader.ui.fragments.common;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter;
 import com.pashkobohdan.ttsreader.mvp.common.AbstractScreenView;
-import com.pashkobohdan.ttsreader.ui.activities.ToolbarHandler;
 
 import java.io.Serializable;
 
@@ -21,25 +18,22 @@ public abstract class AbstractScreenFragment<T extends AbstractPresenter> extend
     @Inject
     protected Provider<T> presenterProvider;
 
-    @Inject
-    Context context;
-
-    @Inject
-    protected T presenter;
+//    @Inject
+    protected T abstractPresenter;
 
     @Override
     public void onPresenterAttached(T presenter) {
-        this.presenter = presenter;
+        this.abstractPresenter = presenter;
     }
 
-    protected AbstractScreenFragment saveData(AbstractScreenFragment fragment, Serializable data) {
+    protected static <T extends AbstractScreenFragment> T saveData(T fragment, Serializable data) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(DATA_KEY, data);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    protected AbstractScreenFragment saveArrayData(AbstractScreenFragment fragment, Serializable[] data) {
+    protected static <T extends AbstractScreenFragment> T saveData(T fragment, Serializable[] data) {
         Bundle bundle = new Bundle();
         for (int i = 0; i < data.length; i++) {
             bundle.putSerializable(DATA_KEY + i, data);
@@ -68,15 +62,9 @@ public abstract class AbstractScreenFragment<T extends AbstractPresenter> extend
         }
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //TODO delete header and back button/menus
-    }
-
-    protected void setHeaderTitle(String title) {
-        if (context instanceof ToolbarHandler) {
-            ((ToolbarHandler) context).setTitle(title);
-        }
-    }
+//    protected void setHeaderTitle(String title) {
+//        if (context instanceof ToolbarHandler) {
+//            ((ToolbarHandler) context).setTitle(title);
+//        }
+//    }
 }

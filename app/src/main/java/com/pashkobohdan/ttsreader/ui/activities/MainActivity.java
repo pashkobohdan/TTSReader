@@ -8,7 +8,9 @@ import android.widget.Toast;
 
 import com.pashkobohdan.ttsreader.R;
 import com.pashkobohdan.ttsreader.TTSReaderProApplication;
+import com.pashkobohdan.ttsreader.model.dto.book.BookDTO;
 import com.pashkobohdan.ttsreader.ui.common.CustomFragmentNavigator;
+import com.pashkobohdan.ttsreader.ui.fragments.book.BookFragment;
 import com.pashkobohdan.ttsreader.ui.fragments.book.BookListFragment;
 
 import javax.inject.Inject;
@@ -36,9 +38,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarHandler {
         protected Fragment createFragment(String screenKey, Object data) {
             switch (screenKey) {
                 case BOOK_LIST:
-                    return BookListFragment.getNewInstance();
+                    return BookListFragment.Companion.getNewInstance();
                 case BOOK_READING:
-                    //TODO
+                    return BookFragment.getNewInstance((BookDTO) data);
                 default:
                     throw new IllegalArgumentException("Not supported screen: " + screenKey);
             }

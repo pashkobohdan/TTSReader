@@ -26,4 +26,10 @@ public class BookListDataExecutor extends CommonDataExecutor<BookDTO> {
         appDatabase.getBookDAO().insertAllBookDTO(array);
         return true;//TODO fix later
     }
+
+    @Override
+    public Boolean deleteData(BookDTO data) {
+        appDatabase.getBookDAO().deleteBook(data);
+        return true;//TODO fix later
+    }
 }

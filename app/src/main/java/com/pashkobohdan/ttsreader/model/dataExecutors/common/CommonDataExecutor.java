@@ -4,8 +4,6 @@ package com.pashkobohdan.ttsreader.model.dataExecutors.common;
 import com.pashkobohdan.ttsreader.model.database.room.AppDatabase;
 import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
 
-import org.reactivestreams.Subscriber;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,26 +18,38 @@ public abstract class CommonDataExecutor<T extends CommonDTO> {
     @Inject
     protected AppDatabase appDatabase;
 
-    public Observable<List<T>> execute(Subscriber<List<T>> subscriber) {
+    public Observable<List<T>> execute(rx.Subscriber<List<T>> subscriber) {
         Observable<List<T>> observable = createObservable();
         observable.subscribe(data -> {
             subscriber.onNext(data);
-            subscriber.onComplete();
+            subscriber.onCompleted();
         }, throwable -> {
             subscriber.onError(throwable);
-            subscriber.onComplete();
+            subscriber.onCompleted();
         });
         return observable;
     }
 
-    public Observable executeAddData(Subscriber<Boolean> subscriber, T data) {
+    public Observable executeAddData(rx.Subscriber<Boolean> subscriber, T data) {
         Observable<Boolean> observable = createAddDataObservable(data);
         observable.subscribe(result -> {
             subscriber.onNext(true);
-            subscriber.onComplete();
+            subscriber.onCompleted();
         }, throwable -> {
             subscriber.onError(throwable);
-            subscriber.onComplete();
+            subscriber.onCompleted();
+        });
+        return observable;
+    }
+
+    public Observable executeDeleteData(rx.Subscriber<Boolean> subscriber, T data) {
+        Observable<Boolean> observable = createDeleteDataObservable(data);
+        observable.subscribe(result -> {
+            subscriber.onNext(true);
+            subscriber.onCompleted();
+        }, throwable -> {
+            subscriber.onError(throwable);
+            subscriber.onCompleted();
         });
         return observable;
     }
@@ -47,6 +57,8 @@ public abstract class CommonDataExecutor<T extends CommonDTO> {
     public abstract List<T> getData() throws SQLException;
 
     public abstract Boolean addData(T data);
+
+    public abstract Boolean deleteData(T data);
 
     private Observable<List<T>> createObservable() {
         return Observable
@@ -58,6 +70,13 @@ public abstract class CommonDataExecutor<T extends CommonDTO> {
     private Observable<Boolean> createAddDataObservable(T data) {
         return Observable
                 .fromCallable(() -> addData(data))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread() );
+    }
+
+    private Observable<Boolean> createDeleteDataObservable(T data) {
+        return Observable
+                .fromCallable(() -> deleteData(data))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread() );
     }
