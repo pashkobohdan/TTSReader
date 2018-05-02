@@ -4,8 +4,8 @@ import com.pashkobohdan.ttsreader.di.modules.AppModule;
 import com.pashkobohdan.ttsreader.di.modules.DatabaseModule;
 import com.pashkobohdan.ttsreader.di.modules.NavigationModule;
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
-import com.pashkobohdan.ttsreader.ui.fragments.book.BookFragment;
-import com.pashkobohdan.ttsreader.ui.fragments.book.BookListFragment;
+import com.pashkobohdan.ttsreader.ui.fragments.book.reading.BookFragment;
+import com.pashkobohdan.ttsreader.ui.fragments.book.list.BookListFragment;
 
 import javax.inject.Singleton;
 

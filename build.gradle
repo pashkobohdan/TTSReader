@@ -4,11 +4,11 @@ buildscript {
     ext.kotlin_version = '1.2.30'
     repositories {
         mavenCentral()
+        jcenter()
         maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
-        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -26,6 +26,11 @@ allprojects {
         mavenCentral()
         maven { url "https://dl.bintray.com/firzenyogesh/maven" }
         maven { url 'https://maven.google.com' }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+        maven { url "http://dl.bintray.com/mobisystech/maven" }
     }
 }
 

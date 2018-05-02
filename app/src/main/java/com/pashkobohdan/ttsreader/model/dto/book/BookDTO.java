@@ -22,7 +22,8 @@ public class BookDTO extends CommonDTO {
     private String author;
     private String text;
     private Integer length;
-    private String progress;
+    private Integer progress;
+    private Integer readingSpeed;
     private String createDateString;
     private String lastOpenDateString;
 
@@ -31,23 +32,25 @@ public class BookDTO extends CommonDTO {
     }
 
     @Ignore
-    public BookDTO(String name, String author, String text, Integer length, String progress, String createDateString, String lastOpenDateString) {
+    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, String createDateString, String lastOpenDateString) {
         this.name = name;
         this.author = author;
         this.text = text;
         this.length = length;
         this.progress = progress;
+        this.readingSpeed = readingSpeed;
         this.createDateString = createDateString;
         this.lastOpenDateString = lastOpenDateString;
     }
 
     @Ignore
-    public BookDTO(String name, String author, String text, Integer length, String progress, Date createDate, Date lastOpenDate) {
+    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Date createDate, Date lastOpenDate) {
         this.name = name;
         this.author = author;
         this.text = text;
         this.length = length;
         this.progress = progress;
+        this.readingSpeed = readingSpeed;
         setCreateDate(createDate);
         setLastOpenDate(lastOpenDate);
     }
@@ -126,11 +129,11 @@ public class BookDTO extends CommonDTO {
         }
     }
 
-    public String getProgress() {
+    public Integer getProgress() {
         return progress;
     }
 
-    public void setProgress(String progress) {
+    public void setProgress(Integer progress) {
         this.progress = progress;
     }
 
@@ -140,5 +143,13 @@ public class BookDTO extends CommonDTO {
 
     public void setLastOpenDate(Date date) {
         lastOpenDateString = DATE_FORMAT.format(date);
+    }
+
+    public Integer getReadingSpeed() {
+        return readingSpeed;
+    }
+
+    public void setReadingSpeed(Integer readingSpeed) {
+        this.readingSpeed = readingSpeed;
     }
 }

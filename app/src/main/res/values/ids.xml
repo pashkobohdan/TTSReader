@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="current_book_waiter" type="id"/>
+    <item name="current_book_settings_container" type="id"/>
+    <item name="current_book_navigation_container" type="id"/>
+    <item name="current_book_hints_container" type="id"/>
+    <item name="current_book_content_container" type="id"/>
+
+    <item name="current_book_before_text" type="id"/>
+    <item name="current_book_current_text" type="id"/>
+    <item name="current_book_after_text" type="id"/>
+
+    <item name="current_book_back_button" type="id"/>
+    <item name="current_book_play_button" type="id"/>
+    <item name="current_book_pause_button" type="id"/>
+    <item name="current_book_next_button" type="id"/>
+</resources>

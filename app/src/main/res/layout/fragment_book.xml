@@ -1,11 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ProgressBar
-        android:id="@+id/fragment_book_waiter_mask"
+        android:id="@id/current_book_waiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/text_settings_container"
+            android:id="@id/current_book_settings_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -65,69 +65,154 @@
             </LinearLayout>
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/text_pager"
+        <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/text_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"/>-->
+
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal">
+            <FrameLayout
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:id="@id/current_book_hints_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:text="Click to start / pause" />
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
+                android:id="@id/current_book_content_container"
+                android:clickable="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@id/current_book_before_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="start"
+                    android:gravity="bottom"
+                    tools:text="Today we will discuss about how can we set click listener for some part of your TextView.
+As you all know we can set click listener on textview like we use to set in other controls(Button, ImageView etc). But what if i want listener for some text only. For example “This is demo android program”, now i want click listener just for “android” word. Yes this is possible with using ClickableSpan.
+If object of ClickableSpan is attached with TextView with a movement method of LinkmovementMethod, text click will call onClick(View) method. Here you are done, whenever you click on”android”, onClick() method of ClickableSpan will be called.
+Let’s see one example program for more than one click listener on TextView." />
+
+                <TextView
+                    android:id="@id/current_book_current_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Now reading text. \nBla Bla bla.\n End of now reading text" />
+
+                <TextView
+                    android:id="@id/current_book_after_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    tools:text="Today we will discuss about how can we set click listener for some part of your TextView.
+As you all know we can set click listener on textview like we use to set in other controls(Button, ImageView etc). But what if i want listener for some text only. For example “This is demo android program”, now i want click listener just for “android” word. Yes this is possible with using ClickableSpan.
+If object of ClickableSpan is attached with TextView with a movement method of LinkmovementMethod, text click will call onClick(View) method. Here you are done, whenever you click on”android”, onClick() method of ClickableSpan will be called.
+Let’s see one example program for more than one click listener on TextView." />
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@id/current_book_navigation_container"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp">
 
                 <ImageButton
+                    android:id="@id/current_book_back_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
                     android:background="@drawable/circle_button_bg"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/back"
-                    android:layout_margin="4dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:src="@drawable/back" />
 
                 <ImageButton
+                    android:id="@id/current_book_play_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
                     android:background="@drawable/circle_button_bg"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/play"
-                    android:layout_margin="4dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:src="@drawable/play" />
 
                 <ImageButton
+                    android:id="@id/current_book_pause_button"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
                     android:background="@drawable/circle_button_bg"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/next"
-                    android:layout_margin="4dp"
+                    android:src="@drawable/pause" />
+
+                <ImageButton
+                    android:id="@id/current_book_next_button"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/next" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp">
 
                 <EditText
-                    android:background="@android:color/transparent"
                     android:layout_width="wrap_content"
-                    android:maxWidth="60dp"
-                    tools:text="345"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:maxLength="4"
+                    tools:text="345" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    tools:text=" / 456"/>
+                    tools:text=" / " />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    tools:text="456" />
             </LinearLayout>
 
         </RelativeLayout>

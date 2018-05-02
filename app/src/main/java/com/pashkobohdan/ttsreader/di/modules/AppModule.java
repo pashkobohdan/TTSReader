@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import com.pashkobohdan.ttsreader.ui.ActivityStartable;
+import com.pashkobohdan.ttsreader.ui.PermissionUtil;
+import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
 import com.pashkobohdan.ttsreader.ui.common.EmptyActivityLifecycleCallbacks;
 
 import dagger.Module;
@@ -27,5 +30,21 @@ public class AppModule {
     @Provides
     public Context provideContext() {
         return applicationContext;
+    }
+
+    @Provides
+    public ActivityStartable provideActivityStartable() {
+        if (applicationContext instanceof MainActivity) {
+            return (MainActivity) applicationContext;
+        }
+        return null;
+    }
+
+    @Provides
+    public PermissionUtil providePermissionUtil() {
+        if (applicationContext instanceof MainActivity) {
+            return (MainActivity) applicationContext;
+        }
+        return null;
     }
 }

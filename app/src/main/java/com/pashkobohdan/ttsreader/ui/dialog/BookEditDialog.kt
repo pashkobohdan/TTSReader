@@ -11,8 +11,8 @@ import butterknife.ButterKnife
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.ui.LabelUtils
-import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.NullUtils
+import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.ValidationResult
 import java.util.*
 
@@ -82,9 +82,9 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
             var newBook = bookDTO
             if (newBook == null) {
                 val text = textEditText.text.toString()
-                val length = text.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().size
+                val length = TextSplitter.sentencesCount(text)
                 newBook = BookDTO(nameEditText.text.toString(), authorEditText.text.toString(),
-                        text, length, Constants.ZERO, Date(), Date())
+                        text, length, 0, 60, Date(), Date())
             } else {
                 newBook.name = nameEditText.text.toString()
                 newBook.author = authorEditText.text.toString()

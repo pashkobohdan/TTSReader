@@ -6,6 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.BookListPresenter
 import com.pashkobohdan.ttsreader.mvp.common.AbstractScreenView
+import java.io.File
 
 @StateStrategyType(SkipStrategy::class)
 interface BookListView : AbstractScreenView<BookListPresenter> {
@@ -15,12 +16,12 @@ interface BookListView : AbstractScreenView<BookListPresenter> {
 
     fun showEditBook(bookDTO: BookDTO)
 
-    fun deleteBook(deletedBookPosition: Int)
+    fun showGetBookListError()
 
-    fun showDataExecutionError()
-
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun hideProgress()
 
     fun bookSaveSuccess()
@@ -30,4 +31,10 @@ interface BookListView : AbstractScreenView<BookListPresenter> {
     fun bookRemoveSuccess()
 
     fun bookRemoveError(bookDTO: BookDTO)
+
+    fun showFileOpenerChooser()
+
+    fun showBookOpenDialog(file: File)
+
+    fun showBookIsAlreadyExistError()
 }

@@ -27,6 +27,10 @@ public class DialogUtils {
         showAlert(title, text, context.getString(R.string.ok), context.getString(R.string.cancel), context, okCallback, null);
     }
 
+    public static void showAlert(@Nullable String title, @Nullable String text, @NonNull Context context, @NonNull Action0 okCallback, @NonNull Action0 cancelCallback) {
+        showAlert(title, text, context.getString(R.string.ok), context.getString(R.string.cancel), context, okCallback, cancelCallback);
+    }
+
     public static void showAlert(@Nullable String title, @Nullable String text, String okButtonText, String cancelButtonText, @NonNull Context context, @NonNull Action0 okCallback, @Nullable Action0 cancelCallback) {
         new AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_dialog_alert)

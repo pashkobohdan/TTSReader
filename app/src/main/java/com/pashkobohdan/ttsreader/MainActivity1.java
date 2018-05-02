@@ -121,7 +121,7 @@ public class MainActivity1 extends AppCompatActivity implements TextToSpeech.OnI
 //    @Override
 //    protected void onPause() {
 //        super.onPause();
-//        //TODO ! pause TTS
+//        //TODO ! pauseMode TTS
 //    }
 //
 //    @Override
