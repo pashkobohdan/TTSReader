@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="current_book_waiter" type="id"/>
+
+    <item name="main_container" type="id"/>
+    <item name="main_progress_bar" type="id"/>
+
+    <item name="speed_rate_setting" type="id"/>
+    <item name="pitch_setting" type="id"/>
+
     <item name="current_book_settings_container" type="id"/>
     <item name="current_book_navigation_container" type="id"/>
     <item name="current_book_hints_container" type="id"/>

@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+import com.pashkobohdan.ttsreader.data.usecase.scheduler.ThreadPoolScheduler;
+import com.pashkobohdan.ttsreader.data.usecase.scheduler.impl.ThreadPoolSchedulerImpl;
 import com.pashkobohdan.ttsreader.ui.ActivityStartable;
 import com.pashkobohdan.ttsreader.ui.PermissionUtil;
+import com.pashkobohdan.ttsreader.ui.ProgressUtil;
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
 import com.pashkobohdan.ttsreader.ui.common.EmptyActivityLifecycleCallbacks;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -46,5 +51,19 @@ public class AppModule {
             return (MainActivity) applicationContext;
         }
         return null;
+    }
+
+    @Provides
+    public ProgressUtil provideProgressUtil() {
+        if (applicationContext instanceof MainActivity) {
+            return (MainActivity) applicationContext;
+        }
+        return null;
+    }
+
+    @Provides
+    @Singleton
+    public ThreadPoolScheduler provideThreadPoolScheduler(ThreadPoolSchedulerImpl threadPoolScheduler) {
+        return threadPoolScheduler;
     }
 }

@@ -9,7 +9,7 @@ import com.pashkobohdan.ttsreader.ui.common.adapter.AbstractListAdapter;
 
 import java.util.List;
 
-public abstract class AbstractListFragment<T extends AbstractPresenter, H extends CommonDTO> extends AbstractScreenFragment<T> {
+public abstract class AbstractListFragment<T extends AbstractPresenter<?>, H extends CommonDTO> extends AbstractScreenFragment<T> {
 
     public final class ListAdapter extends AbstractListAdapter<H> {
 

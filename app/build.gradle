@@ -83,7 +83,8 @@ dependencies {
     //    RxJava
     api 'io.reactivex:rxjava:1.1.6'
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    api 'io.reactivex.rxjava2:rxjava:2.1.2'
+//    api 'io.reactivex.rxjava2:rxjava:2.1.2'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
 
     //    Multi FAB
     api 'com.github.clans:fab:1.6.4'

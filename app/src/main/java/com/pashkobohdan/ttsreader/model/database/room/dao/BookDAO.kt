@@ -10,6 +10,9 @@ interface BookDAO {
     @get:Query("SELECT * FROM Book")
     val allBookDtoList: List<BookDTO>
 
+    @Query("SELECT * FROM Book WHERE id LIKE :bookId")
+    fun bookByIdList(bookId: Int): List<BookDTO>
+
     @get:Query("SELECT * FROM BookTitleImage")
     val allBookTitleImageDtoList: List<BookTitleImageDTO>
 

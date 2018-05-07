@@ -24,6 +24,7 @@ public class BookDTO extends CommonDTO {
     private Integer length;
     private Integer progress;
     private Integer readingSpeed;
+    private Integer readingPitch;
     private String createDateString;
     private String lastOpenDateString;
 
@@ -32,25 +33,27 @@ public class BookDTO extends CommonDTO {
     }
 
     @Ignore
-    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, String createDateString, String lastOpenDateString) {
+    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Integer readingPitch, String createDateString, String lastOpenDateString) {
         this.name = name;
         this.author = author;
         this.text = text;
         this.length = length;
         this.progress = progress;
         this.readingSpeed = readingSpeed;
+        this.readingPitch = readingPitch;
         this.createDateString = createDateString;
         this.lastOpenDateString = lastOpenDateString;
     }
 
     @Ignore
-    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Date createDate, Date lastOpenDate) {
+    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Integer readingPitch, Date createDate, Date lastOpenDate) {
         this.name = name;
         this.author = author;
         this.text = text;
         this.length = length;
         this.progress = progress;
         this.readingSpeed = readingSpeed;
+        this.readingPitch = readingPitch;
         setCreateDate(createDate);
         setLastOpenDate(lastOpenDate);
     }
@@ -151,5 +154,13 @@ public class BookDTO extends CommonDTO {
 
     public void setReadingSpeed(Integer readingSpeed) {
         this.readingSpeed = readingSpeed;
+    }
+
+    public Integer getReadingPitch() {
+        return readingPitch;
+    }
+
+    public void setReadingPitch(Integer readingPitch) {
+        this.readingPitch = readingPitch;
     }
 }

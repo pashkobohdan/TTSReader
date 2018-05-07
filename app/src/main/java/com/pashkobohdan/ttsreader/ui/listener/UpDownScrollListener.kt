@@ -1,4 +1,4 @@
-package com.pashkobohdan.ttsreader.ui.tools
+package com.pashkobohdan.ttsreader.ui.listener
 
 import android.support.v7.widget.RecyclerView
 

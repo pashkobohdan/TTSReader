@@ -2,8 +2,11 @@ package com.pashkobohdan.ttsreader.mvp.bookList
 
 import android.Manifest
 import com.arellomobile.mvp.InjectViewState
-import com.pashkobohdan.ttsreader.model.dataExecutors.BookListDataExecutor
-import com.pashkobohdan.ttsreader.model.dataExecutors.common.DefaultSubscriber
+import com.pashkobohdan.ttsreader.data.usecase.observers.DefaultObserver
+import com.pashkobohdan.ttsreader.data.usecase.observers.UnitObserver
+import com.pashkobohdan.ttsreader.executors.book.GetBookListUseCase
+import com.pashkobohdan.ttsreader.executors.book.RemoveBookUseCase
+import com.pashkobohdan.ttsreader.executors.book.SaveBookUseCase
 import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
@@ -22,7 +25,11 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
     private val READ_STORAGE_PERMISSION = 1001
 
     @Inject
-    lateinit var bookListDataExecutor: BookListDataExecutor
+    lateinit var getBookListUseCase: GetBookListUseCase
+    @Inject
+    lateinit var saveBookUseCase: SaveBookUseCase
+    @Inject
+    lateinit var removeBookUseCase: RemoveBookUseCase
     @Inject
     lateinit var permissionUtil: PermissionUtil
 
@@ -30,15 +37,15 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
 
     override fun onFirstViewAttach() {
         viewState.showProgress()
-        bookListDataExecutor.execute(object : DefaultSubscriber<List<BookDTO>>() {
+        getBookListUseCase.execute(object : DefaultObserver<List<BookDTO>>() {
 
             override fun onNext(bookDTOs: List<BookDTO>) {
                 bookDTOList = bookDTOs.toMutableList()
                 viewState.showBookList(bookDTOs)
             }
 
-            override fun onError(t: Throwable) {
-                super.onError(t)
+            override fun onError(e: Throwable) {
+                super.onError(e)
                 viewState.showGetBookListError()
             }
 
@@ -55,9 +62,9 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
         })
     }
 
-    fun openNewBookSelected(file : File) {
+    fun openNewBookSelected(file: File) {
         val fileName = InternalStorageFileHelper.fileNameWithoutExtension(file)
-        if(bookDTOList.filter { fileName.equals(it.name) }.isNotEmpty())  {
+        if (bookDTOList.filter { fileName.equals(it.name) }.isNotEmpty()) {
             viewState.showBookIsAlreadyExistError()
         } else {
             viewState.showBookOpenDialog(file)
@@ -65,20 +72,23 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
     }
 
     fun bookReadingEnd(bookReadingResult: BookReadingResult?) {
-        if(bookReadingResult == null) {
+        if (bookReadingResult == null) {
             //TODO reading error
         } else {
             val newBook = BookDTO(bookReadingResult.bookName, bookReadingResult.bookAuthor,
                     bookReadingResult.bookText,
-                    TextSplitter.sentencesCount(bookReadingResult.bookText), 0, 60, Date(), Date())
+                    TextSplitter.sentencesCount(bookReadingResult.bookText),
+                    0, 100, 100,
+                    Date(), Date())
             saveBook(newBook)
         }
     }
 
     fun saveBook(bookDTO: BookDTO) {
         viewState.showProgress()
-        bookListDataExecutor.executeAddData(object : DefaultSubscriber<Boolean>() {
-            override fun onNext(result: Boolean) {
+        saveBookUseCase.execute(bookDTO, object : UnitObserver() {
+
+            override fun onNext() {
                 if (!bookDTOList.contains(bookDTO)) {
                     bookDTOList.add(bookDTO)
                 }
@@ -94,26 +104,28 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
             override fun onFinally() {
                 viewState.hideProgress()
             }
-        }, bookDTO)
+        })
     }
 
     fun deleteBook(bookDTO: BookDTO) {
         viewState.showProgress()
-        bookListDataExecutor.executeDeleteData(object : DefaultSubscriber<Boolean>() {
-            override fun onNext(result: Boolean) {
+        removeBookUseCase.execute(bookDTO, object : UnitObserver() {
+
+            override fun onNext() {
                 bookDTOList.remove(bookDTO)
                 viewState.showBookList(bookDTOList)
                 viewState.bookRemoveSuccess()
             }
 
             override fun onError(e: Throwable) {
+                super.onError(e)
                 viewState.bookRemoveError(bookDTO)
             }
 
-            override fun onCompleted() {
+            override fun onFinally() {
                 viewState.hideProgress()
             }
-        }, bookDTO)
+        })
     }
 
     fun editBook(bookDTO: BookDTO) {
@@ -121,6 +133,6 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
     }
 
     fun openBook(bookDTO: BookDTO) {
-        router.navigateTo(Screen.BOOK_READING, bookDTO)
+        router.navigateTo(Screen.BOOK_READING, bookDTO.id)
     }
 }

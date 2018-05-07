@@ -31,4 +31,8 @@
         <item name="android:padding">16dp</item>
     </style>
 
+    <style name="CustomDialogTheme">
+
+    </style>
+
 </resources>

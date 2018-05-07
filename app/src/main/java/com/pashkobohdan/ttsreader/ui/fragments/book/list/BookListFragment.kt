@@ -32,7 +32,7 @@ import com.pashkobohdan.ttsreader.ui.dialog.BookEditDialog
 import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils
 import com.pashkobohdan.ttsreader.ui.fragments.book.widget.BookListItemWidget
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractListFragment
-import com.pashkobohdan.ttsreader.ui.tools.UpDownScrollListener
+import com.pashkobohdan.ttsreader.ui.listener.UpDownScrollListener
 import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.enums.BookActionType
 import com.pashkobohdan.ttsreader.utils.fileSystem.newFileOpeningThread.FileOpenThread

@@ -4,61 +4,48 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.Toast
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.TTSReaderProApplication
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.ui.ActivityStartable
 import com.pashkobohdan.ttsreader.ui.PermissionUtil
+import com.pashkobohdan.ttsreader.ui.ProgressUtil
 import com.pashkobohdan.ttsreader.ui.Screen.BOOK_LIST
-import com.pashkobohdan.ttsreader.ui.Screen.BOOK_READING
 import com.pashkobohdan.ttsreader.ui.common.CustomFragmentNavigator
-import com.pashkobohdan.ttsreader.ui.fragments.book.list.BookListFragment
-import com.pashkobohdan.ttsreader.ui.fragments.book.reading.BookFragment
+import com.pashkobohdan.ttsreader.ui.navigation.FragmentProvider
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.commands.Replace
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil {
+class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, ProgressUtil {
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
     @Inject
     lateinit var router: Router
+    @Inject
+    lateinit var fragmentProvider: FragmentProvider
+
+    @BindView(R.id.main_container)
+    lateinit var mainContainer: View
+    @BindView(R.id.main_progress_bar)
+    lateinit var progressBar: View
 
     private val activityResultsMap: MutableMap<Int, (Intent?, Int) -> Unit> = mutableMapOf()
     private val permissionRequestMap: MutableMap<Int, () -> Unit> = mutableMapOf()
 
-    private val navigator = object : CustomFragmentNavigator(supportFragmentManager, R.id.main_container) {
-        private var lastTryExitTime = 0L
-
-        override fun createFragment(screenKey: String, data: Any?): Fragment {
-            when (screenKey) {
-                BOOK_LIST -> return BookListFragment.newInstance
-                BOOK_READING -> return BookFragment.getNewInstance(data as BookDTO)
-                else -> throw IllegalArgumentException("Not supported screen: $screenKey")
-            }
-        }
-
-        override fun showSystemMessage(message: String) {
-            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-        }
-
-        override fun exit() {
-            val currentTime = System.nanoTime()
-            if (currentTime - lastTryExitTime < CLICK_AGAIN_TO_EXIT_TIME) {
-                finish()
-            } else {
-                Toast.makeText(this@MainActivity, getString(R.string.click_again_to_exit), Toast.LENGTH_SHORT).show()
-                lastTryExitTime = currentTime
-            }
-        }
+    private val navigator by lazy {
+        CustomFragmentNavigator(
+                fragmentProvider,
+                this,
+                supportFragmentManager,
+                R.id.main_container)
     }
 
     override fun onResume() {
@@ -75,6 +62,7 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil {
         TTSReaderProApplication.INSTANCE.applicationComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        ButterKnife.bind(this)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -128,17 +116,17 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil {
         }
     }
 
-    private fun isAllResultsGranted(grantResults: IntArray) : Boolean {
-        for(result in grantResults) {
-            if(result != PackageManager.PERMISSION_GRANTED) return false
+    private fun isAllResultsGranted(grantResults: IntArray): Boolean {
+        for (result in grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) return false
         }
         return true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
-        for(permissionKey in permissionRequestMap.keys) {
-            if(requestCode.equals(permissionKey)) {
+        for (permissionKey in permissionRequestMap.keys) {
+            if (requestCode.equals(permissionKey)) {
                 if ((grantResults.isNotEmpty() && isAllResultsGranted(grantResults))) {
                     permissionRequestMap[permissionKey]?.invoke()
                 } else {
@@ -150,7 +138,22 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil {
         }
     }
 
-    companion object {
-        private val CLICK_AGAIN_TO_EXIT_TIME = 2 * 1000000000
+    override fun showProgress() {
+        progressBar.visibility = View.VISIBLE
     }
+
+    override fun hideProgress() {
+        progressBar.visibility = View.GONE
+    }
+
+    override fun showProgressWithLock() {
+        showProgress()
+        mainContainer.isClickable = false
+    }
+
+    override fun hideProgressWithUnlock() {
+        hideProgress()
+        mainContainer.isClickable = false
+    }
+
 }

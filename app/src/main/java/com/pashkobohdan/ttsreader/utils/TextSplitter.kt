@@ -6,11 +6,11 @@ class TextSplitter private constructor() {
 
     companion object {
 
-        private val SENTENCES_REGEX = "[\\w,;'\"\\s]+[.?!:]"
+//        private val SENTENCES_REGEX = "[\\w,;'\"\\s]+[.?!:]"
 
         fun splitToSentences(text: String): List<String> {
             val sentences: MutableList<String> = mutableListOf()
-            val p = Pattern.compile(SENTENCES_REGEX)
+            val p = Pattern.compile(Patterns.TEXT_CORRECT_SYMBOLS)
             val formattedText = text.trim() + Constants.DOT
             val m = p.matcher(formattedText)
             while (m.find()) {
@@ -21,8 +21,8 @@ class TextSplitter private constructor() {
         }
 
         fun sentencesCount(text: String): Int {
-            var sentencesCount: Int = 0
-            val p = Pattern.compile(SENTENCES_REGEX)
+            var sentencesCount = 0
+            val p = Pattern.compile(Patterns.TEXT_CORRECT_SYMBOLS)
             val formattedText = text.trim() + Constants.DOT
             val m = p.matcher(formattedText)
             while (m.find()) {

@@ -84,7 +84,7 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
                 val text = textEditText.text.toString()
                 val length = TextSplitter.sentencesCount(text)
                 newBook = BookDTO(nameEditText.text.toString(), authorEditText.text.toString(),
-                        text, length, 0, 60, Date(), Date())
+                        text, length, 0, 100, 100, Date(), Date())
             } else {
                 newBook.name = nameEditText.text.toString()
                 newBook.author = authorEditText.text.toString()
