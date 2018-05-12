@@ -11,7 +11,7 @@ class FragmentProvider @Inject constructor() {
     fun createFragment(screenKey: String?, data: Any?): Fragment {
         when (screenKey) {
             Screen.BOOK_LIST -> return BookListFragment.newInstance
-            Screen.BOOK_READING -> return BookFragment.getNewInstance(data as Int)
+            Screen.BOOK_READING -> return BookFragment.getNewInstance(data as Long)
             else -> throw IllegalArgumentException("Not supported screen: $screenKey")
         }
     }

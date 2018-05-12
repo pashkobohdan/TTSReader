@@ -3,7 +3,7 @@ package com.pashkobohdan.ttsreader.mvp.bookList.view
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.BookListPresenter
 import com.pashkobohdan.ttsreader.mvp.common.AbstractScreenView
 import java.io.File

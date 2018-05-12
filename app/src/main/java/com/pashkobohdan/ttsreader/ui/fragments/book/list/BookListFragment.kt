@@ -23,7 +23,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.clans.fab.FloatingActionMenu
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.TTSReaderProApplication
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.BookListPresenter
 import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
 import com.pashkobohdan.ttsreader.ui.ActivityStartable

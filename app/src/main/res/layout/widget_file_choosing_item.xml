@@ -5,7 +5,7 @@
 
         <variable
             name="file"
-            type="com.pashkobohdan.ttsreader.model.dto.file.FileDTO" />
+            type="com.pashkobohdan.ttsreader.data.model.dto.file.FileDTO" />
     </data>
 
     <LinearLayout

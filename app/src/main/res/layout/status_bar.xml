@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/status_bar_book_author"
+            tools:text="Author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="#000"/>
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:id="@+id/status_bar_book_name"
+            tools:text="Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/status_bar_prev"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/back"/>
+
+        <ImageView
+            android:id="@+id/status_bar_play"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/play"/>
+
+        <ImageView
+            tools:visibility="gone"
+            android:id="@+id/status_bar_pause"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/pause"/>
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/status_bar_next"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/next" />
+
+        <!--<ImageView-->
+            <!--android:id="@+id/status_bar_collapse"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:src="@drawable/icon_close" />-->
+    </LinearLayout>
+</LinearLayout>

@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.pashkobohdan.ttsreader.R;
 import com.pashkobohdan.ttsreader.databinding.WidgetBookListItemBinding;
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO;
 import com.pashkobohdan.ttsreader.ui.adapter.AbstractListItemHolder;
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractListItemWidget;
 

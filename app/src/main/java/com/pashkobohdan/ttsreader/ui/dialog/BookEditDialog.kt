@@ -9,7 +9,7 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.pashkobohdan.ttsreader.R
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.ui.LabelUtils
 import com.pashkobohdan.ttsreader.utils.NullUtils
 import com.pashkobohdan.ttsreader.utils.TextSplitter

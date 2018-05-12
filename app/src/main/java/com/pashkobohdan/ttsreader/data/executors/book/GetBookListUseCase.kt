@@ -1,8 +1,8 @@
-package com.pashkobohdan.ttsreader.executors.book
+package com.pashkobohdan.ttsreader.data.executors.book
 
+import com.pashkobohdan.ttsreader.data.model.database.room.AppDatabase
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.data.usecase.GetUseCase
-import com.pashkobohdan.ttsreader.model.database.room.AppDatabase
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import javax.inject.Inject
 
 

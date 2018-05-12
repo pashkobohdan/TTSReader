@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.pashkobohdan.ttsreader.R;
 import com.pashkobohdan.ttsreader.databinding.WidgetFileChoosingItemBinding;
-import com.pashkobohdan.ttsreader.model.dto.file.FileDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.file.FileDTO;
 import com.pashkobohdan.ttsreader.ui.adapter.AbstractListItemHolder;
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractListItemWidget;
 

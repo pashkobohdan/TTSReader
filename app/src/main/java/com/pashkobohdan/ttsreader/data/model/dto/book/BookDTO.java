@@ -1,10 +1,10 @@
-package com.pashkobohdan.ttsreader.model.dto.book;
+package com.pashkobohdan.ttsreader.data.model.dto.book;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,8 +15,8 @@ public class BookDTO extends CommonDTO {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey()
+    private long id;
 
     private String name;
     private String author;
@@ -30,6 +30,7 @@ public class BookDTO extends CommonDTO {
 
     public BookDTO() {
         //Default constructor for Room
+        id = System.currentTimeMillis();
     }
 
     @Ignore
@@ -43,6 +44,7 @@ public class BookDTO extends CommonDTO {
         this.readingPitch = readingPitch;
         this.createDateString = createDateString;
         this.lastOpenDateString = lastOpenDateString;
+        id = System.currentTimeMillis();
     }
 
     @Ignore
@@ -56,13 +58,14 @@ public class BookDTO extends CommonDTO {
         this.readingPitch = readingPitch;
         setCreateDate(createDate);
         setLastOpenDate(lastOpenDate);
+        id = System.currentTimeMillis();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

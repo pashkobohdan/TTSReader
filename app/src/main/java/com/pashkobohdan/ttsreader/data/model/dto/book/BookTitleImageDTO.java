@@ -1,10 +1,10 @@
-package com.pashkobohdan.ttsreader.model.dto.book;
+package com.pashkobohdan.ttsreader.data.model.dto.book;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO;
 
 @Entity(tableName = "BookTitleImage")
 public class BookTitleImageDTO extends CommonDTO {

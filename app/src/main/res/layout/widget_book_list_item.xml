@@ -3,7 +3,7 @@
     <data>
         <variable
             name="book"
-            type="com.pashkobohdan.ttsreader.model.dto.book.BookDTO" />
+            type="com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO" />
     </data>
 
     <LinearLayout

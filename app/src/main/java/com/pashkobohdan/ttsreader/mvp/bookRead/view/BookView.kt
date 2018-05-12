@@ -44,9 +44,9 @@ interface BookView : AbstractScreenView<BookPresenter> {
 
     fun showEmptyBookError()
 
-    fun speechText(text: String, speechRate:Int, pitchRate: Int)
+//    fun speechText(text: String, speechRate:Int, pitchRate: Int)
 
-    fun stopSpeeching()
+//    fun stopSpeeching()
 
     fun showEndOfBookAlert()
 

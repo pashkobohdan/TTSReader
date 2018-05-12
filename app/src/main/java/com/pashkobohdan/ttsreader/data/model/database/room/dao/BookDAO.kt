@@ -1,8 +1,8 @@
-package com.pashkobohdan.ttsreader.model.database.room.dao
+package com.pashkobohdan.ttsreader.data.model.database.room.dao
 
 import android.arch.persistence.room.*
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
-import com.pashkobohdan.ttsreader.model.dto.book.BookTitleImageDTO
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookTitleImageDTO
 
 @Dao
 interface BookDAO {
@@ -11,10 +11,13 @@ interface BookDAO {
     val allBookDtoList: List<BookDTO>
 
     @Query("SELECT * FROM Book WHERE id LIKE :bookId")
-    fun bookByIdList(bookId: Int): List<BookDTO>
+    fun bookByIdList(bookId: Long): List<BookDTO>
 
     @get:Query("SELECT * FROM BookTitleImage")
     val allBookTitleImageDtoList: List<BookTitleImageDTO>
+
+    @Query("UPDATE Book SET readingSpeed=:speed, readingPitch=:pitch, progress=:readingPosition WHERE id = :bookId")
+    fun updateBookInfo(bookId: Long, speed: Int, pitch: Int, readingPosition: Int);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllBookDTO(vararg bookDTOS: BookDTO)

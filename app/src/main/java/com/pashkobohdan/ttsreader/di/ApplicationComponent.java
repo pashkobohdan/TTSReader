@@ -3,9 +3,10 @@ package com.pashkobohdan.ttsreader.di;
 import com.pashkobohdan.ttsreader.di.modules.AppModule;
 import com.pashkobohdan.ttsreader.di.modules.DatabaseModule;
 import com.pashkobohdan.ttsreader.di.modules.NavigationModule;
+import com.pashkobohdan.ttsreader.service.SpeechService;
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
-import com.pashkobohdan.ttsreader.ui.fragments.book.reading.BookFragment;
 import com.pashkobohdan.ttsreader.ui.fragments.book.list.BookListFragment;
+import com.pashkobohdan.ttsreader.ui.fragments.book.reading.BookFragment;
 
 import javax.inject.Singleton;
 
@@ -24,4 +25,6 @@ public interface ApplicationComponent {
     void inject(BookListFragment fragment);
 
     void inject(BookFragment fragment);
+
+    void inject(SpeechService service);
 }

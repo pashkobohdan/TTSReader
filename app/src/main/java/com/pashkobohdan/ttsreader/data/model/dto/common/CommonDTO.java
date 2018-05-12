@@ -1,4 +1,4 @@
-package com.pashkobohdan.ttsreader.model.dto.common;
+package com.pashkobohdan.ttsreader.data.model.dto.common;
 
 import java.io.Serializable;
 

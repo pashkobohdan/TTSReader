@@ -1,9 +1,13 @@
 package com.pashkobohdan.ttsreader.ui.fragments.book.reading
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.speech.tts.TextToSpeech
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +22,11 @@ import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.TTSReaderProApplication
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
+import com.pashkobohdan.ttsreader.service.SpeechService
 import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.listener.EmptyOnSeekBarChangeListener
-import com.pashkobohdan.ttsreader.utils.listeners.EmptyUtteranceProgressListener
+import com.pashkobohdan.ttsreader.utils.Constants
 
 
 class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
@@ -66,25 +71,27 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 //    lateinit var pager: ViewPager
 //    private var bookPagerAdapter: BookPagerAdapter? = null
 
-    val textToSpeech: TextToSpeech by lazy {
-        val newTextToSpeech = TextToSpeech(context?.applicationContext, TextToSpeech.OnInitListener { status ->
-            if (status == TextToSpeech.ERROR) {
-                presenter.ttsReaderInitError()
-            } else {
-                presenter.ttsReaderInitSuccessfully()
-            }
-        })
-        newTextToSpeech.setOnUtteranceProgressListener(object : EmptyUtteranceProgressListener() {
-            override fun onDone(utteranceId: String?) {
-                runInUiThread { presenter.speechDone(utteranceId) }
-            }
+//    val textToSpeech: TextToSpeech by lazy {
+//        val newTextToSpeech = TextToSpeech(context?.applicationContext, TextToSpeech.OnInitListener { status ->
+//            if (status == TextToSpeech.ERROR) {
+//                presenter.ttsReaderInitError()
+//            } else {
+//                presenter.ttsReaderInitSuccessfully()
+//            }
+//        })
+//        newTextToSpeech.setOnUtteranceProgressListener(object : EmptyUtteranceProgressListener() {
+//            override fun onDone(utteranceId: String?) {
+//                runInUiThread { presenter.speechDone(utteranceId) }
+//            }
+//
+//            override fun onError(utteranceId: String?, errorCode: Int) {
+//                runInUiThread { presenter.speechError(utteranceId, errorCode) }
+//            }
+//        })
+//        newTextToSpeech
+//    }
 
-            override fun onError(utteranceId: String?, errorCode: Int) {
-                runInUiThread { presenter.speechError(utteranceId, errorCode) }
-            }
-        })
-        newTextToSpeech
-    }
+    var ttsConnection: ServiceConnection? = null
 
     @OnClick(R.id.current_book_back_button)
     fun backClick() = presenter.back()
@@ -107,7 +114,7 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     @ProvidePresenter
     fun createSamplePresenter(): BookPresenter {
         val providePresenter = presenterProvider.get()
-        providePresenter.init(data as Int)
+        providePresenter.init(data as Long)
         return providePresenter
     }
 
@@ -128,13 +135,17 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         speedSeekBar.max = SPEED_SEEK_BAR_MAX_VALUE
         speedSeekBar.setOnSeekBarChangeListener(object : EmptyOnSeekBarChangeListener() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                presenter.speedChanged(progress + SPEED_SEEK_BAR_MIN_VALUE)
+                if (fromUser) {
+                    presenter.speedChanged(progress + SPEED_SEEK_BAR_MIN_VALUE)
+                }
             }
         })
         pitchSeekBar.max = PITCH_SEEK_BAR_MAX_VALUE
         pitchSeekBar.setOnSeekBarChangeListener(object : EmptyOnSeekBarChangeListener() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                presenter.pitchChanged(progress + PITCH_SEEK_BAR_MIN_VALUE)
+                if (fromUser) {
+                    presenter.pitchChanged(progress + PITCH_SEEK_BAR_MIN_VALUE)
+                }
             }
         })
 //        bookPagerAdapter = BookPagerAdapter(fragmentManager, ArrayList()) { s ->
@@ -144,7 +155,24 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     }
 
     override fun initTtsReader() {
-        val initedTTS = textToSpeech
+        ttsConnection = object : ServiceConnection {
+
+            override fun onServiceConnected(name: ComponentName, service: IBinder) {
+                val binder = service as SpeechService.TTSBinder
+                presenter.serviceCreated(binder.service)
+                //TODO
+            }
+
+            override fun onServiceDisconnected(name: ComponentName) {
+                //TODO
+            }
+        }
+
+        val ttsIntent = Intent(activity, SpeechService::class.java)
+        ttsIntent.setAction(Constants.STARTFOREGROUND_ACTION);
+
+        activity?.bindService(ttsIntent, ttsConnection, Context.BIND_AUTO_CREATE)
+        activity?.startService(ttsIntent)
     }
 
     override fun setText(beforeText: String, nowReadingText: String, afterText: String) {
@@ -229,36 +257,38 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         contentContainer.isClickable = false
     }
 
-    val speechParams: HashMap<String, String> by lazy {
-        hashMapOf(Pair(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "stringId"))
-    }
+//    val speechParams: HashMap<String, String> by lazy {
+//        hashMapOf(Pair(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "stringId"))
+//    }
 
-    override fun speechText(text: String, speechRate: Int, pitchRate: Int) {
-        textToSpeech.setSpeechRate(speechRate / DIVIDE_TTS_SPEECH_RATE_BY)
-        textToSpeech.setPitch(pitchRate / DIVIDE_TTS_PITCH_RATE_BY)
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speechParams)
-    }
+//    override fun speechText(text: String, speechRate: Int, pitchRate: Int) {
+//        textToSpeech.setSpeechRate(speechRate / DIVIDE_TTS_SPEECH_RATE_BY)
+//        textToSpeech.setPitch(pitchRate / DIVIDE_TTS_PITCH_RATE_BY)
+//        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speechParams)
+//    }
 
-    override fun stopSpeeching() {
-        if (textToSpeech.isSpeaking) {
-            textToSpeech.stop()
-        }
-    }
+//    override fun stopSpeeching() {
+//        if (textToSpeech.isSpeaking) {
+//            textToSpeech.stop()
+//        }
+//    }
 
     override fun onPause() {
         presenter.saveBookInfo()
+        presenter.closeNotificationIfPause()
         super.onPause()
     }
 
     override fun onDestroy() {
-        stopSpeeching();
-        textToSpeech.shutdown();
+        ttsConnection?.let { activity?.unbindService(ttsConnection) }
+//        stopSpeeching();
+//        textToSpeech.shutdown(); // TODO replace with service !
         super.onDestroy()
     }
 
     companion object {
 
-        fun getNewInstance(bookId: Int): BookFragment {
+        fun getNewInstance(bookId: Long): BookFragment {
             return AbstractScreenFragment.saveData(BookFragment(), bookId)
         }
     }

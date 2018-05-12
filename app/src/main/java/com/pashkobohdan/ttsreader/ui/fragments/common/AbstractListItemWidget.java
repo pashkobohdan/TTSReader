@@ -2,7 +2,7 @@ package com.pashkobohdan.ttsreader.ui.fragments.common;
 
 import android.view.ViewGroup;
 
-import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO;
 import com.pashkobohdan.ttsreader.ui.adapter.AbstractListItemHolder;
 
 import rx.functions.Action1;

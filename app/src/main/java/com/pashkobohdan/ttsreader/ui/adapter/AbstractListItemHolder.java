@@ -3,7 +3,7 @@ package com.pashkobohdan.ttsreader.ui.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO;
 
 import rx.functions.Action1;
 

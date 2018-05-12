@@ -2,12 +2,12 @@ package com.pashkobohdan.ttsreader.mvp.bookList
 
 import android.Manifest
 import com.arellomobile.mvp.InjectViewState
+import com.pashkobohdan.ttsreader.data.executors.book.GetBookListUseCase
+import com.pashkobohdan.ttsreader.data.executors.book.RemoveBookUseCase
+import com.pashkobohdan.ttsreader.data.executors.book.SaveBookUseCase
+import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.data.usecase.observers.DefaultObserver
 import com.pashkobohdan.ttsreader.data.usecase.observers.UnitObserver
-import com.pashkobohdan.ttsreader.executors.book.GetBookListUseCase
-import com.pashkobohdan.ttsreader.executors.book.RemoveBookUseCase
-import com.pashkobohdan.ttsreader.executors.book.SaveBookUseCase
-import com.pashkobohdan.ttsreader.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
 import com.pashkobohdan.ttsreader.ui.PermissionUtil

@@ -3,7 +3,7 @@ package com.pashkobohdan.ttsreader.di.modules;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.pashkobohdan.ttsreader.model.database.room.AppDatabase;
+import com.pashkobohdan.ttsreader.data.model.database.room.AppDatabase;
 
 import javax.inject.Singleton;
 

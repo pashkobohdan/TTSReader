@@ -1,7 +1,7 @@
-package com.pashkobohdan.ttsreader.model.dto.file;
+package com.pashkobohdan.ttsreader.data.model.dto.file;
 
 
-import com.pashkobohdan.ttsreader.model.dto.common.CommonDTO;
+import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO;
 
 import java.io.File;
 
