@@ -5,6 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.common.AbstractScreenView
+import com.pashkobohdan.ttsreader.utils.TextSplitter
 
 @StateStrategyType(SkipStrategy::class)
 interface BookView : AbstractScreenView<BookPresenter> {
@@ -16,10 +17,13 @@ interface BookView : AbstractScreenView<BookPresenter> {
     fun hideProgress()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setBookTitle(title: String)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun setText(beforeText: String, nowReadingText: String, afterText: String)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun initSpeedAndPitch(speed: Int, pitch:Int)
+    fun initSpeedAndPitch(speed: Int, pitch: Int)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun playMode()
@@ -44,9 +48,9 @@ interface BookView : AbstractScreenView<BookPresenter> {
 
     fun showEmptyBookError()
 
-//    fun speechText(text: String, speechRate:Int, pitchRate: Int)
+    fun selectPage(page: Int)
 
-//    fun stopSpeeching()
+    fun setPagesText(bookPageInfo: TextSplitter.Companion.BookPagesInfo)
 
     fun showEndOfBookAlert()
 

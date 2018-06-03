@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "619935725",
+    "firebase_url": "https://tts-reader-e93ba.firebaseio.com",
+    "project_id": "tts-reader-e93ba",
+    "storage_bucket": "tts-reader-e93ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619935725:android:e73200624670b084",
+        "android_client_info": {
+          "package_name": "com.pashkobohdan.ttsreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619935725-je4ggadpcor2o8suqstqq2mqgoot4956.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "619935725-je4ggadpcor2o8suqstqq2mqgoot4956.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYzvLy965leZyj1SnRs2Pb7WD8sRAVDZ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

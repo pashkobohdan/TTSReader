@@ -16,14 +16,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ListItem">
-        <item name="android:drawable">@drawable/list_item_selector</item>
-        <item name="android:layout_marginTop">@dimen/list_vertical_margin</item>
-        <item name="android:layout_marginBottom">@dimen/list_vertical_margin</item>
-        <item name="android:layout_marginLeft">@dimen/list_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/list_horizontal_margin</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/list_item_selector</item>
     </style>
 
     <style name="inputDialog">

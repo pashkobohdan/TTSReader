@@ -20,4 +20,8 @@ public class AbstractPresenter<T extends AbstractScreenView> extends MvpPresente
         super.attachView(view);
         view.onPresenterAttached(this);
     }
+
+    public void backNavigation() {
+        router.exit();
+    }
 }

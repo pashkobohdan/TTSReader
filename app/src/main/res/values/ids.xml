@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <item name="header_left_view" type="id"/>
+    <item name="header_right_view" type="id"/>
+    <item name="header_title" type="id"/>
+    <item name="header_button_image" type="id"/>
+
     <item name="main_container" type="id"/>
     <item name="main_progress_bar" type="id"/>
 
@@ -9,6 +14,10 @@
 
     <item name="current_book_settings_container" type="id"/>
     <item name="current_book_navigation_container" type="id"/>
+    <item name="current_book_book_mode_container" type="id"/>
+    <item name="current_book_book_mode_current_page" type="id"/>
+    <item name="current_book_book_mode_page_count" type="id"/>
+
     <item name="current_book_hints_container" type="id"/>
     <item name="current_book_content_container" type="id"/>
 
@@ -20,4 +29,9 @@
     <item name="current_book_play_button" type="id"/>
     <item name="current_book_pause_button" type="id"/>
     <item name="current_book_next_button" type="id"/>
+    <item name="current_book_book_mode" type="id"/>
+    <item name="current_book_reading_mode_root" type="id"/>
+    <item name="current_book_book_mode_root" type="id"/>
+
+    <item name="book_page_text" type="id"/>
 </resources>

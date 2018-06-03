@@ -8,9 +8,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import butterknife.BindView
@@ -24,15 +27,16 @@ import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.service.SpeechService
 import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils
+import com.pashkobohdan.ttsreader.ui.fragments.BookPagerAdapter
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.listener.EmptyOnSeekBarChangeListener
 import com.pashkobohdan.ttsreader.utils.Constants
+import com.pashkobohdan.ttsreader.utils.TextSplitter
 
 
 class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 
     private val TTS_CHECK_CODE_REQUEST_CODE = 1001
-
     private val HINTS_TIME_MILLIS = 2000L
     private val SPEED_SEEK_BAR_MIN_VALUE = 1
     private val SPEED_SEEK_BAR_MAX_VALUE = 500
@@ -62,34 +66,20 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     lateinit var playButton: View
     @BindView(R.id.current_book_pause_button)
     lateinit var pauseButton: View
+    @BindView(R.id.current_book_book_mode_container)
+    lateinit var bookModePagesContainer: View
+    @BindView(R.id.current_book_book_mode_root)
+    lateinit var bookModeRoot: ViewPager
+    @BindView(R.id.current_book_reading_mode_root)
+    lateinit var readingModeRoot: View
+    @BindView(R.id.current_book_book_mode_current_page)
+    lateinit var currentPageInput: EditText
+    @BindView(R.id.current_book_book_mode_page_count)
+    lateinit var pageCountTextView: TextView
     @BindView(R.id.speed_rate_setting)
     lateinit var speedSeekBar: SeekBar
     @BindView(R.id.pitch_setting)
     lateinit var pitchSeekBar: SeekBar
-
-//    @BindView(R.id.text_pager)
-//    lateinit var pager: ViewPager
-//    private var bookPagerAdapter: BookPagerAdapter? = null
-
-//    val textToSpeech: TextToSpeech by lazy {
-//        val newTextToSpeech = TextToSpeech(context?.applicationContext, TextToSpeech.OnInitListener { status ->
-//            if (status == TextToSpeech.ERROR) {
-//                presenter.ttsReaderInitError()
-//            } else {
-//                presenter.ttsReaderInitSuccessfully()
-//            }
-//        })
-//        newTextToSpeech.setOnUtteranceProgressListener(object : EmptyUtteranceProgressListener() {
-//            override fun onDone(utteranceId: String?) {
-//                runInUiThread { presenter.speechDone(utteranceId) }
-//            }
-//
-//            override fun onError(utteranceId: String?, errorCode: Int) {
-//                runInUiThread { presenter.speechError(utteranceId, errorCode) }
-//            }
-//        })
-//        newTextToSpeech
-//    }
 
     var ttsConnection: ServiceConnection? = null
 
@@ -110,6 +100,39 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 
     @OnClick(R.id.current_book_content_container)
     fun contentClick() = pauseClick()
+
+    @OnClick(R.id.current_book_book_mode)
+    fun bookModeClick() {
+        presenter.startBookPageMode()
+    }
+
+    @OnClick(R.id.speed_value_plus)
+    fun speedPlusClick() {
+        val newValue = Math.min(SPEED_SEEK_BAR_MAX_VALUE, speedSeekBar.progress + 5)
+        speedSeekBar.progress = newValue
+        presenter.speedChanged(newValue)
+    }
+
+    @OnClick(R.id.speed_value_minus)
+    fun speedMinusClick() {
+        val newValue = Math.max(SPEED_SEEK_BAR_MIN_VALUE, speedSeekBar.progress - 5)
+        speedSeekBar.progress = newValue
+        presenter.speedChanged(newValue)
+    }
+
+    @OnClick(R.id.pitch_value_plus)
+    fun pitchPlusClick() {
+        val newValue = Math.min(PITCH_SEEK_BAR_MAX_VALUE, pitchSeekBar.progress + 5)
+        pitchSeekBar.progress = newValue
+        presenter.pitchChanged(newValue)
+    }
+
+    @OnClick(R.id.pitch_value_minus)
+    fun pitchMinusClick() {
+        val newValue = Math.max(PITCH_SEEK_BAR_MIN_VALUE, pitchSeekBar.progress - 5)
+        pitchSeekBar.progress = newValue
+        presenter.pitchChanged(newValue)
+    }
 
     @ProvidePresenter
     fun createSamplePresenter(): BookPresenter {
@@ -148,10 +171,20 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
                 }
             }
         })
-//        bookPagerAdapter = BookPagerAdapter(fragmentManager, ArrayList()) { s ->
-//            //TODO !
-//        }
-//        pager!!.adapter = bookPagerAdapter
+
+        addLeftHeaderView(createBackHeaderButton())
+
+        currentPageInput.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                presenter.goToPage(currentPageInput.text.toString().toInt())
+                return@OnEditorActionListener true;
+            }
+            return@OnEditorActionListener  false;
+        })
+    }
+
+    override fun setBookTitle(title: String) {
+        setHeaderTitle(title)
     }
 
     override fun initTtsReader() {
@@ -191,12 +224,52 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         }
     }
 
+    override fun selectPage(page: Int) {
+        bookModeRoot.setCurrentItem(page)
+    }
+
     override fun startPagesMode() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        setRightHeaderView(createImageHeaderButton(R.drawable.action_done, {
+            presenter.pageSelected(currentPageInput.text.toString().toInt())
+        }))
+        bookModePagesContainer.visibility = View.VISIBLE
+        navigationContainer.visibility = View.GONE
+        settingsContainer.visibility = View.GONE
+        bookModeRoot.visibility = View.VISIBLE
+        readingModeRoot.visibility = View.GONE
     }
 
     override fun endPagesMode() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        cleanRightHeaderContainer()
+        bookModePagesContainer.visibility = View.GONE
+        navigationContainer.visibility = View.VISIBLE
+        settingsContainer.visibility = View.VISIBLE
+        bookModeRoot.visibility = View.GONE
+        readingModeRoot.visibility = View.VISIBLE
+    }
+
+    override fun setPagesText(bookPageInfo: TextSplitter.Companion.BookPagesInfo) {
+        currentPageInput.setText((bookPageInfo.currentPage + 1).toString())
+
+        pageCountTextView.setText(bookPageInfo.text.size.toString())
+        bookModeRoot.adapter = BookPagerAdapter(
+                context ?: throw IllegalStateException("Context is null"),
+                bookPageInfo.text)
+        bookModeRoot.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                currentPageInput.setText((position + 1).toString())
+            }
+
+        })
+        bookModeRoot.setCurrentItem(bookPageInfo.currentPage)
     }
 
     override fun showEmptyBookError() {
@@ -256,22 +329,6 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         playButton.visibility = View.VISIBLE
         contentContainer.isClickable = false
     }
-
-//    val speechParams: HashMap<String, String> by lazy {
-//        hashMapOf(Pair(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "stringId"))
-//    }
-
-//    override fun speechText(text: String, speechRate: Int, pitchRate: Int) {
-//        textToSpeech.setSpeechRate(speechRate / DIVIDE_TTS_SPEECH_RATE_BY)
-//        textToSpeech.setPitch(pitchRate / DIVIDE_TTS_PITCH_RATE_BY)
-//        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speechParams)
-//    }
-
-//    override fun stopSpeeching() {
-//        if (textToSpeech.isSpeaking) {
-//            textToSpeech.stop()
-//        }
-//    }
 
     override fun onPause() {
         presenter.saveBookInfo()

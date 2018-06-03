@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@color/colorPrimary">
+
+    <FrameLayout
+        android:id="@id/header_left_view"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@drawable/circle_button_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@id/header_title"
+        android:textAllCaps="true"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="Title bla bla bla. Very long title for ellipsize check"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
+    <FrameLayout
+        android:id="@id/header_right_view"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@drawable/circle_button_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_gravity="center"/>
+</LinearLayout>

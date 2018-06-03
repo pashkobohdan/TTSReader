@@ -30,13 +30,14 @@ import com.pashkobohdan.ttsreader.ui.ActivityStartable
 import com.pashkobohdan.ttsreader.ui.adapter.AbstractListItemHolder
 import com.pashkobohdan.ttsreader.ui.dialog.BookEditDialog
 import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils
-import com.pashkobohdan.ttsreader.ui.fragments.book.widget.BookListItemWidget
+import com.pashkobohdan.ttsreader.ui.fragments.book.list.widget.BookListItemWidget
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractListFragment
 import com.pashkobohdan.ttsreader.ui.listener.UpDownScrollListener
 import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.enums.BookActionType
 import com.pashkobohdan.ttsreader.utils.fileSystem.newFileOpeningThread.FileOpenThread
 import ir.sohreco.androidfilechooser.FileChooserDialog
+import rx.functions.Action1
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -59,6 +60,10 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     lateinit var waiterProgressBar: ProgressBar
     @BindView(R.id.add_book_fab_menu)
     lateinit var addBookActionMenu: FloatingActionMenu
+    @BindView(R.id.bookListContainer)
+    lateinit var bookListContainer: View
+    @BindView(R.id.noDataContainer)
+    lateinit var emptyBookListContainer: View
 
     private lateinit var adapter: ListAdapter
 
@@ -117,6 +122,8 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
                 addBookActionMenu.showMenu(true)
             }
         })
+
+        setHeaderTitle("Book list")
     }
 
     override fun showFileOpenerChooser() {
@@ -182,34 +189,6 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
 
     }
 
-    private fun selectOpeningFile(inputFile: File) {
-
-//        val bookName = InternalStorageFileHelper.fileNameWithoutExtension(inputFile)
-
-//        if (InternalStorageFileHelper.isFileWasOpened(this, inputFile)) {
-//
-//            val dialogClickListener = { dialog, which ->
-//                when (which) {
-//                    DialogInterface.BUTTON_POSITIVE -> openFileWithUI(inputFile)
-//
-//                    DialogInterface.BUTTON_NEGATIVE -> {
-//                    }
-//                }
-//            }
-//
-//            val builder = AlertDialog.Builder(context)
-//            builder.setMessage(getString(R.string.book_rewriting_confirm) + "\"" +
-//                    bookName +
-//                    "\"")
-//                    .setPositiveButton("Yes", dialogClickListener)
-//                    .setNegativeButton("No", dialogClickListener)
-//                    .show()
-//
-//        } else {
-//        openFileWithUI(inputFile)
-//        }
-    }
-
     override fun showBookOpenDialog(file: File) {
         val pd = ProgressDialog(context)
         pd.setTitle("Reading")
@@ -244,35 +223,15 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
         return result
     }
 
-//    private fun selectOpeningFile(inputFile: File) {
-//        val bookName = InternalStorageFileHelper.fileNameWithoutExtension(inputFile)
-//
-//        if (InternalStorageFileHelper.isFileWasOpened(this, inputFile)) {
-//
-//            val dialogClickListener = { dialog, which ->
-//                when (which) {
-//                    DialogInterface.BUTTON_POSITIVE -> openFileWithUI(inputFile)
-//
-//                    DialogInterface.BUTTON_NEGATIVE -> {
-//                    }
-//                }
-//            }
-//
-//            val builder = AlertDialog.Builder(this)
-//            builder.setMessage(getString(R.string.book_rewriting_confirm) + "\"" +
-//                    bookName +
-//                    "\"")
-//                    .setPositiveButton(R.string.yes, dialogClickListener)
-//                    .setNegativeButton(R.string.no, dialogClickListener)
-//                    .show()
-//
-//        } else {
-//            openFileWithUI(inputFile)
-//        }
-//    }
-
     override fun showBookList(bookDTOList: List<BookDTO>) {
-        adapter.setDataList(bookDTOList)
+        if(bookDTOList.isEmpty()) {
+            emptyBookListContainer.visibility = View.VISIBLE
+            bookListContainer.visibility = View.GONE
+        } else {
+            emptyBookListContainer.visibility = View.GONE
+            bookListContainer.visibility = View.VISIBLE
+            adapter.setDataList(bookDTOList)
+        }
     }
 
     override fun showEditBook(bookDTO: BookDTO) {
@@ -304,8 +263,8 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     }
 
     override fun getItemHolder(parent: ViewGroup): AbstractListItemHolder<BookDTO> {
-        return bookListItemWidgetProvider.get().getHolder(parent, { book -> presenter.openBook(book) }
-        ) { bookDTO ->
+        return bookListItemWidgetProvider.get().getHolder(parent, Action1{ book -> presenter.openBook(book) }
+        , Action1{ bookDTO ->
             DialogUtils.showOptionsDialog("Choose action type", context!!, Arrays.asList(*BookActionType.values()),
                     { action ->
                         when (action) {
@@ -322,7 +281,7 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
                     else -> throw IllegalArgumentException("Unsupported book action: " + action.name)
                 }
             }, true)
-        }
+        })
     }
 
     override fun bookSaveSuccess() {

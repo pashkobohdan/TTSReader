@@ -8,21 +8,22 @@
 
     <LinearLayout
         style="@style/ListItem"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
+            android:padding="8dp">
 
             <ImageView
-                android:scaleType="fitCenter"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/default_book_image_1"
-                android:contentDescription="@string/image_of_book" />
+                android:contentDescription="@string/image_of_book"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_book_image_1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,19 +33,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{book.author}"/>
+                    android:text="@{book.author}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{book.name}"/>
+                    android:text="@{book.name}" />
 
                 <TextView
                     android:id="@+id/book_list_item_book_progress"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d7d7d7"/>
     </LinearLayout>
 </layout>

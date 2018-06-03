@@ -42,7 +42,11 @@
             android:id="@+id/status_bar_prev"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/back"/>
+            android:src="@drawable/back"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/circle_button_bg"/>
 
         <ImageView
             android:id="@+id/status_bar_play"
@@ -50,7 +54,11 @@
             android:layout_marginLeft="6dp"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@drawable/play"/>
+            android:src="@drawable/play"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/circle_button_bg"/>
 
         <ImageView
             tools:visibility="gone"
@@ -59,7 +67,11 @@
             android:layout_marginLeft="6dp"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@drawable/pause"/>
+            android:src="@drawable/pause"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/circle_button_bg"/>
 
         <ImageView
             android:layout_gravity="center_vertical"
@@ -68,12 +80,11 @@
             android:layout_marginLeft="6dp"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/next" />
+            android:src="@drawable/next"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/circle_button_bg"/>
 
-        <!--<ImageView-->
-            <!--android:id="@+id/status_bar_collapse"-->
-            <!--android:layout_width="24dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:src="@drawable/icon_close" />-->
     </LinearLayout>
 </LinearLayout>

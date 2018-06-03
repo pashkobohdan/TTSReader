@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pashkobohdan.ttsreader">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".TTSReaderProApplication"
         android:allowBackup="true"
@@ -21,8 +23,6 @@
         </activity>
         <service
             android:name=".service.SpeechService"
-            android:enabled="true"
-            android:exported="true"
             android:stopWithTask="false"/>
     </application>
 

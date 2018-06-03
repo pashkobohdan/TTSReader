@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#7f33ac</color>
-    <color name="colorPrimaryDark">#933ec5</color>
-    <color name="colorAccent">#933ec5</color>
+    <color name="colorPrimary">#7B1FA2</color>
+    <color name="colorPrimaryDark">#9C27B0</color>
+    <color name="colorAccent">#FF9800</color>
 
     <color name="white">#FFF</color>
 
     <color name="listItemBackground">#ecd0d0</color>
     <color name="listItemBackgroundClicked">#e9baba</color>
 
-    <color name="book_list_listView_background">#c5cae8</color>
-    <color name="book_list_fab_menu_shadow">#66000000</color>
-    <color name="book_list_fab_menu_color_normal">#DA4336</color>
-    <color name="book_list_fab_menu_color_pressed">#E75043</color>
+    <color name="book_list_listView_background">#f8f5f9</color>
+    <color name="book_list_fab_menu_shadow">#53000000</color>
+    <color name="book_list_fab_menu_color_normal">#FF9800</color>
+    <color name="book_list_fab_menu_color_pressed">#da8200</color>
     <color name="book_list_fab_menu_color_ripple">#99FFFFFF</color>
     <color name="book_list_fab_menu_label_color_normal">#333333</color>
     <color name="book_list_fab_menu_label_color_pressed">#444444</color>

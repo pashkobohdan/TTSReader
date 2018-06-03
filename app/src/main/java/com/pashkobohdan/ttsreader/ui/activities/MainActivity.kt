@@ -4,9 +4,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.view.KeyEvent
 import android.view.View
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -16,12 +17,18 @@ import com.pashkobohdan.ttsreader.ui.ActivityStartable
 import com.pashkobohdan.ttsreader.ui.PermissionUtil
 import com.pashkobohdan.ttsreader.ui.ProgressUtil
 import com.pashkobohdan.ttsreader.ui.Screen.BOOK_LIST
+import com.pashkobohdan.ttsreader.ui.Screen.BOOK_READING
 import com.pashkobohdan.ttsreader.ui.common.CustomFragmentNavigator
+import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.navigation.FragmentProvider
+import com.pashkobohdan.ttsreader.utils.Constants
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
+import ru.terrakok.cicerone.commands.Forward
 import ru.terrakok.cicerone.commands.Replace
 import javax.inject.Inject
+
+
 
 class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, ProgressUtil {
 
@@ -64,14 +71,18 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, Pro
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-
         if (savedInstanceState == null) {
             navigator.applyCommand(Replace(BOOK_LIST, null))
         } else {
             navigator.applyCommand(Replace(BOOK_LIST, null))
             //TODO maybe don't need this because I have a moxy (with stateStrategy)
+        }
+
+        if (intent != null) {
+            val bookId = intent.getLongExtra(Constants.OPEN_BOOK_ACTION_BOOK_ID_KEY, -1)
+            if (bookId > 0) {
+                navigator.applyCommand(Forward(BOOK_READING, bookId))
+            }
         }
     }
 
@@ -106,13 +117,8 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, Pro
         if (isPermissionsGranted(permissions)) {
             grantedCallback()
         } else {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                            Manifest.permission.READ_CONTACTS)) {
-//                // Show an explanation to the user *asynchronously* -- don't block this thread
-//            } else {
             ActivityCompat.requestPermissions(this, permissions, requestCode)
             permissionRequestMap.put(requestCode, grantedCallback)
-//            }
         }
     }
 
@@ -138,6 +144,22 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, Pro
         }
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val fragment = getActiveFragment()
+            if(fragment is AbstractScreenFragment<*>) {
+                fragment.onBackNavigation()
+            }
+            true
+        } else super.onKeyDown(keyCode, event)
+
+    }
+
+    fun getActiveFragment(): Fragment {
+        val fragments = supportFragmentManager.getFragments()
+        return fragments[fragments.size - 1]
+    }
+
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
     }
@@ -148,12 +170,12 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, Pro
 
     override fun showProgressWithLock() {
         showProgress()
-        mainContainer.isClickable = false
+        mainContainer.isEnabled = false
     }
 
     override fun hideProgressWithUnlock() {
         hideProgress()
-        mainContainer.isClickable = false
+        mainContainer.isEnabled = true
     }
 
 }

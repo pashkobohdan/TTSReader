@@ -191,6 +191,7 @@ class SpeechService : Service(), TtsListener {
 
     override fun init(okCallback: () -> Unit, errorCallback: () -> Unit) {
         if (serviceSuccessInited) {
+            okCallback()
             return
         }
         textToSpeech = TextToSpeech(applicationContext, TextToSpeech.OnInitListener { status ->
@@ -231,27 +232,28 @@ class SpeechService : Service(), TtsListener {
         }
     }
 
+    private fun hideNotificationIfOpened() {
+        if (isNotificationShowed) {
+            pause()
+            notificationManager.cancel(NOTOFICATION_ID)
+        }
+    }
 
-    override fun loadBook(bookId: Long, loadOkCallback: () -> Unit,
+    override fun loadBook(bookId: Long, loadOkCallback: (BookDTO) -> Unit,
                           loadErrorCallback: () -> Unit,
                           bookEmptyErrorCallback: () -> Unit,
                           bookInfoCahngeCallback: (Int, Int) -> Unit) {
         this.bookInfoCahngeCallback = bookInfoCahngeCallback
 
-        if (this.bookId > -1 && !this.bookId.equals(bookId)) {
-            if (isNotificationShowed) {
-                pause()
-                notificationManager.cancel(NOTOFICATION_ID)
-            }
+        if (!this.bookId.equals(bookId)) {
+            hideNotificationIfOpened()
             serviceSuccessInited = false
-        }
-        if (this.bookId == -1L || !this.bookId.equals(bookId)) {
             this.bookId = bookId
             getBookListUseCase.execute(bookId, object : DefaultObserver<BookDTO>() {
 
                 override fun onNext(response: BookDTO) {
                     bookDTO = response
-                    text = readPages()
+                    text = TextSplitter.readPages(bookDTO)
 
                     readingPosition = response.progress
                     speechRate = response.readingSpeed
@@ -262,7 +264,7 @@ class SpeechService : Service(), TtsListener {
                         bookEmptyErrorCallback()
                     } else {
                         initStartPageAndSentence()
-                        loadOkCallback()
+                        loadOkCallback(bookDTO)
                     }
                 }
 
@@ -270,6 +272,11 @@ class SpeechService : Service(), TtsListener {
                     loadErrorCallback()
                 }
             })
+        } else {
+            //book is already loaded
+            bookInfoCahngeCallback(speechRate, pitchRate)
+            initStartPageAndSentence()
+            loadOkCallback(bookDTO)
         }
     }
 
@@ -281,7 +288,6 @@ class SpeechService : Service(), TtsListener {
             if (pageInTextIndex.equals(0)) {
                 //start of book
                 pause()
-//                viewState.showStartOfBookAlert() // TODO think about callback !
             } else {
                 //go to next page
                 readingPosition--
@@ -343,30 +349,27 @@ class SpeechService : Service(), TtsListener {
         saveCurrentBookInfo()
     }
 
-    private fun readPages(): List<List<String>> {
-        val pages: MutableList<List<String>> = mutableListOf()
-        var sentencesInPage: MutableList<String> = mutableListOf()
-        var pageSymbolCount = 0
-        for (sentence in TextSplitter.splitToSentences(bookDTO.text)) {
-            sentencesInPage.add(sentence)
-            pageSymbolCount += sentence.length
-            if (pageSymbolCount > MIN_PAGE_SYMBOLS_COUNT) {
-                pages.add(sentencesInPage)
-                sentencesInPage = mutableListOf()
-                pageSymbolCount = 0
-            }
-        }
-        if (sentencesInPage.isNotEmpty()) {
-            pages.add(sentencesInPage)
-        }
-        return pages
-    }
-
     private fun isBookEmpty(): Boolean {
         if (text.isEmpty() || text[0].isEmpty() || text[0][0].isEmpty()) {
             return true
         }
         return false
+    }
+
+    override fun currentPageSelected(page: Int) {
+        if(readingState == BookPresenter.READING_STATE.READING) {
+            pause()
+            currentPage = text[page]
+            readingPosition = TextSplitter.getProgressByCurrentPage(bookDTO, page)
+            currentSentence = currentPage[0]
+            initPageText()
+            resume()
+        } else {
+            currentPage = text[page]
+            readingPosition = TextSplitter.getProgressByCurrentPage(bookDTO, page)
+            currentSentence = currentPage[0]
+            initPageText()
+        }
     }
 
     private fun initStartPageAndSentence() {
@@ -423,11 +426,14 @@ class SpeechService : Service(), TtsListener {
     }
 
     override fun onDestroy() {
-//        pause()
-//        textToSpeech.shutdown();
+        hideNotificationIfOpened()
         super.onDestroy()
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        hideNotificationIfOpened()
+        stopSelf()
+    }
 
     override fun stopIfPause() {
         if (readingState == BookPresenter.READING_STATE.PAUSE) {
@@ -440,6 +446,7 @@ class SpeechService : Service(), TtsListener {
     }
 
     override fun saveCurrentBookInfo() {
+        bookDTO.progress = readingPosition
         updateBookInfoUseCase.execute(UpdateBookInfoUseCase.BookInfo(bookId, speechRate,
                 pitchRate, readingPosition), object : DefaultObserver<Unit>() {
             override fun onNext(t: Unit) {
@@ -452,7 +459,6 @@ class SpeechService : Service(), TtsListener {
 
         val DIVIDE_TTS_SPEECH_RATE_BY = 100.0f
         val DIVIDE_TTS_PITCH_RATE_BY = 100.0f
-        val MIN_PAGE_SYMBOLS_COUNT = 800
 
         val NOTOFICATION_ID = 774
         val NOTOFICATION_CHANNEL_ID = "999"
