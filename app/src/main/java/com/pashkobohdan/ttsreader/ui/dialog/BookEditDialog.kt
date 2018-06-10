@@ -5,9 +5,11 @@ import android.content.DialogInterface
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.ui.LabelUtils
@@ -24,12 +26,21 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
     lateinit var authorEditText: EditText
     @BindView(R.id.book_edit_dialog_book_text)
     lateinit var textEditText: EditText
+    @BindView(R.id.edit_book_text_button)
+    lateinit var editBookTextButton: View
     @BindView(R.id.book_edit_dialog_book_name_layout)
     lateinit var bookNameLayout: TextInputLayout
     @BindView(R.id.book_edit_dialog_book_author_layout)
     lateinit var bookAuthorLayout: TextInputLayout
     @BindView(R.id.book_edit_dialog_book_text_layout)
     lateinit var bookTextLayout: TextInputLayout
+
+    @OnClick(R.id.edit_book_text_button)
+    fun editBookTextClick() {
+        textEditText.setText(bookDTO?.text)
+        textEditText.isEnabled = true
+        editBookTextButton.visibility = View.GONE
+    }
 
     fun show() {
         val factory = LayoutInflater.from(context)
@@ -38,7 +49,15 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
 
         nameEditText.setText(bookDTO?.name)
         authorEditText.setText(bookDTO?.author)
-        textEditText.setText(bookDTO?.text)
+        val text = bookDTO?.text
+        if(text != null) {
+            val cutText = text.subSequence(0, 100)
+            textEditText.setText(cutText)
+            textEditText.isEnabled = false
+        } else {
+            editBookTextButton.visibility = View.GONE
+        }
+
 
         val builder = AlertDialog.Builder(context)
                 .setTitle(if (bookDTO == null) R.string.book_creating else R.string.book_editing)

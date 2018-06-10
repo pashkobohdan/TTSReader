@@ -56,6 +56,19 @@
                     android:inputType="textMultiLine"
                     android:minLines="4" />
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:id="@+id/edit_book_text_button"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit text"
+                android:focusable="true" />
         </LinearLayout>
 
     </ScrollView>
