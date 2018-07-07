@@ -52,6 +52,6 @@ class CloudBookListPresenter @Inject constructor(): AbstractPresenter<CloudBookL
     }
 
     fun showDetail(bookInfo: CloudBookInfo) {
-
+        viewState.showBookText(bookInfo.name, bookInfo.text)
     }
 }

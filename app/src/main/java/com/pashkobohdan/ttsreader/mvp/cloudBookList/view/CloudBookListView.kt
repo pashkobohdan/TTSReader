@@ -27,4 +27,6 @@ interface CloudBookListView : AbstractScreenView<CloudBookListPresenter> {
     fun showBookDownloadSuccessful()
 
     fun bookSaveError(bookDTO : BookDTO)
+
+    fun showBookText(title: String, text: String)
 }

@@ -1,5 +1,6 @@
 package com.pashkobohdan.ttsreader.ui.fragments.cloudBook
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
@@ -91,6 +92,15 @@ class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, Cloud
     override fun bookSaveError(bookDTO: BookDTO) {
         Snackbar.make(view!!, "Failure while saving book",
                 Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showBookText(title: String, text: String) {
+        AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(text)
+                .setCancelable(true)
+                .create()
+                .show()
     }
 
     override fun showBookList(bookInfoList: List<CloudBookInfo>) {

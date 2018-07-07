@@ -26,7 +26,7 @@ object FirebaseHelper {
     }
 
     fun readBooksInfo(updateListener: (List<CloudBookInfo>) -> Unit, loadError: () -> Unit) {
-        publicBookDatabase.addValueEventListener(object : ValueEventListener {
+        publicBookDatabase.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val list = mutableListOf<CloudBookInfo>()
                 for (snap in dataSnapshot.children) {
@@ -43,7 +43,7 @@ object FirebaseHelper {
     }
 
     fun getBookDtoByInfo(info: CloudBookInfo, readListener: (BookDTO) -> Unit, loadError: () -> Unit) {
-        val key = info.fullTextKey ?: throw IllegalArgumentException("Empty full text key")
+        val key = info.fullTextKey
         publicBookTextDatabase.child(key).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 loadError()

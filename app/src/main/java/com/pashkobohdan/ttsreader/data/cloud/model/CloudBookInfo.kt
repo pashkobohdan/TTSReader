@@ -4,10 +4,10 @@ import com.pashkobohdan.ttsreader.data.model.dto.common.CommonDTO
 
 class CloudBookInfo : CommonDTO{
 
-    var name: String? = null
-    var author: String? = null
-    var text: String? = null
-    var fullTextKey: String? = null
+    var name: String = ""
+    var author: String = ""
+    var text: String = ""
+    var fullTextKey: String = ""
 
     constructor() {}
 
