@@ -12,7 +12,7 @@ import android.view.View
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.pashkobohdan.ttsreader.R
-import com.pashkobohdan.ttsreader.TTSReaderProApplication
+import com.pashkobohdan.ttsreader.TTSReaderApplication
 import com.pashkobohdan.ttsreader.ui.ActivityStartable
 import com.pashkobohdan.ttsreader.ui.PermissionUtil
 import com.pashkobohdan.ttsreader.ui.ProgressUtil
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, Pro
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        TTSReaderProApplication.INSTANCE.applicationComponent.inject(this)
+        TTSReaderApplication.INSTANCE.getApplicationComponent().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)

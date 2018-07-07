@@ -22,7 +22,8 @@ import butterknife.OnClick
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.pashkobohdan.ttsreader.R
-import com.pashkobohdan.ttsreader.TTSReaderProApplication
+import com.pashkobohdan.ttsreader.TTSReaderApplication
+import com.pashkobohdan.ttsreader.annotations.IsProVersion
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.service.SpeechService
@@ -32,6 +33,7 @@ import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.listener.EmptyOnSeekBarChangeListener
 import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.TextSplitter
+import javax.inject.Inject
 
 
 class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
@@ -42,8 +44,6 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     private val SPEED_SEEK_BAR_MAX_VALUE = 500
     private val PITCH_SEEK_BAR_MIN_VALUE = 1
     private val PITCH_SEEK_BAR_MAX_VALUE = 200
-    private val DIVIDE_TTS_SPEECH_RATE_BY = 100.0f
-    private val DIVIDE_TTS_PITCH_RATE_BY = 100.0f
 
     @InjectPresenter
     lateinit var presenter: BookPresenter
@@ -142,7 +142,7 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        TTSReaderProApplication.INSTANCE.applicationComponent.inject(this)
+        TTSReaderApplication.INSTANCE.getApplicationComponent().inject(this)
         super.onCreate(savedInstanceState)
     }
 
@@ -151,6 +151,11 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         ButterKnife.bind(this, view)
         return view
     }
+
+    @JvmField
+    @Inject
+    @IsProVersion
+    var  isProVersion :Boolean= false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

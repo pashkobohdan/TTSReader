@@ -10,6 +10,7 @@ android {
             dirs "libs"
         }
     }
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.pashkobohdan.ttsreader"
         minSdkVersion 16
@@ -25,8 +26,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            debuggable true
+        }
     }
-    dataBinding { // problem with JACK option
+    productFlavors {
+        free {
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+        }
+        pro {
+            applicationIdSuffix ".pro"
+            versionNameSuffix "-pro"
+        }
+    }
+    dataBinding {
         enabled = true
     }
     compileOptions {
@@ -90,8 +105,6 @@ dependencies {
     api 'com.github.clans:fab:1.6.4'
 
     //    File chooser
-//    api'yogesh.firzen:FilesLister:1.0.1'
-//    api'yogesh.firzen:MukkiyaSevaigal:1.0.6'
     api 'ir.sohreco.androidfilechooser:android-file-chooser:1.1.0'
     api 'com.itextpdf:itextg:5.5.10'
     api 'com.folioreader:folioreader:0.3.6'
@@ -105,6 +118,8 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.1.0-beta3"
     api"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
 }
 apply plugin: 'com.google.gms.google-services'

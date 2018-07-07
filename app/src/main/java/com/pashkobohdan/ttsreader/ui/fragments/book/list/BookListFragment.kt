@@ -22,7 +22,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.clans.fab.FloatingActionMenu
 import com.pashkobohdan.ttsreader.R
-import com.pashkobohdan.ttsreader.TTSReaderProApplication
+import com.pashkobohdan.ttsreader.TTSReaderApplication
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookList.BookListPresenter
 import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
@@ -86,11 +86,11 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     @OnClick(R.id.add_book_download_fab)
     internal fun downloadBookButtonClicked() {
         addBookActionMenu.close(true)
-        //TODO open download book dialog/fragment
+        presenter.downloadFromCloud()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        TTSReaderProApplication.INSTANCE.applicationComponent.inject(this)
+        TTSReaderApplication.INSTANCE.getApplicationComponent().inject(this)
         super.onCreate(savedInstanceState)
         //        setRetainInstance(true);
     }
@@ -104,7 +104,9 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //        setHeaderTitle("Book list fragment");
+        setRightHeaderView(createImageHeaderButton(R.drawable.refresh, {
+            presenter.refresh()
+        }))
 
         adapter = ListAdapter(ArrayList<BookDTO>())
 
@@ -271,6 +273,7 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
                             BookActionType.DELETE -> "Delete"
                             BookActionType.EDIT -> "Edit"
                             BookActionType.OPEN -> "Open"
+                            BookActionType.UPLOAD_TO_PUBLIC_CLOUD -> "Upload to cloud"
                             else -> Constants.EMPTY
                         }
                     }, { action ->
@@ -278,6 +281,7 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
                     BookActionType.DELETE -> presenter.deleteBook(bookDTO)
                     BookActionType.EDIT -> presenter.editBook(bookDTO)
                     BookActionType.OPEN -> presenter.openBook(bookDTO)
+                    BookActionType.UPLOAD_TO_PUBLIC_CLOUD -> presenter.uploadToStorage(bookDTO)
                     else -> throw IllegalArgumentException("Unsupported book action: " + action.name)
                 }
             }, true)
@@ -290,7 +294,7 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     }
 
     override fun bookSaveError(bookDTO: BookDTO) {
-        Snackbar.make(addBookActionMenu, "Failure when saving book",
+        Snackbar.make(addBookActionMenu, "Failure while saving book",
                 Snackbar.LENGTH_LONG).setAction("Try again") { presenter::saveBook }.show()
     }
 
@@ -302,6 +306,16 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     override fun bookRemoveError(bookDTO: BookDTO) {
         Snackbar.make(addBookActionMenu, "Failure while deleting book",
                 Snackbar.LENGTH_LONG).setAction("Try again") { presenter::deleteBook }.show()
+    }
+
+    override fun bookUploadError(bookDTO: BookDTO) {
+        Snackbar.make(addBookActionMenu, "Failure while uploading book",
+                Snackbar.LENGTH_LONG).setAction("Try again") { presenter.uploadToStorage(bookDTO) }.show()
+    }
+
+    override fun bookUploadSuccess() {
+        Snackbar.make(addBookActionMenu, "Book was successfully uploaded to cloud",
+                Snackbar.LENGTH_LONG).show()
     }
 
     companion object {

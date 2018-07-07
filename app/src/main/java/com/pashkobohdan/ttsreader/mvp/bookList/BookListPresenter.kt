@@ -2,6 +2,7 @@ package com.pashkobohdan.ttsreader.mvp.bookList
 
 import android.Manifest
 import com.arellomobile.mvp.InjectViewState
+import com.pashkobohdan.ttsreader.data.cloud.FirebaseHelper
 import com.pashkobohdan.ttsreader.data.executors.book.GetBookListUseCase
 import com.pashkobohdan.ttsreader.data.executors.book.RemoveBookUseCase
 import com.pashkobohdan.ttsreader.data.executors.book.SaveBookUseCase
@@ -36,23 +37,7 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
     private var bookDTOList: MutableList<BookDTO> = mutableListOf()
 
     override fun onFirstViewAttach() {
-        viewState.showProgress()
-        getBookListUseCase.execute(object : DefaultObserver<List<BookDTO>>() {
-
-            override fun onNext(bookDTOs: List<BookDTO>) {
-                bookDTOList = bookDTOs.toMutableList()
-                viewState.showBookList(bookDTOs)
-            }
-
-            override fun onError(e: Throwable) {
-                super.onError(e)
-                viewState.showGetBookListError()
-            }
-
-            override fun onFinally() {
-                viewState.hideProgress()
-            }
-        })
+        refresh()
     }
 
     fun openNewBook() {
@@ -128,11 +113,43 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
         })
     }
 
+    fun refresh() {
+        viewState.showProgress()
+        getBookListUseCase.execute(object : DefaultObserver<List<BookDTO>>() {
+
+            override fun onNext(bookDTOs: List<BookDTO>) {
+                bookDTOList = bookDTOs.toMutableList()
+                viewState.showBookList(bookDTOs)
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+                viewState.showGetBookListError()
+            }
+
+            override fun onFinally() {
+                viewState.hideProgress()
+            }
+        })
+    }
+
     fun editBook(bookDTO: BookDTO) {
         viewState.showEditBook(bookDTO)
     }
 
     fun openBook(bookDTO: BookDTO) {
         router.navigateTo(Screen.BOOK_READING, bookDTO.id)
+    }
+
+    fun downloadFromCloud() {
+        router.navigateTo(Screen.CLOUD_BOOK_LIST)
+    }
+
+    fun uploadToStorage(bookDTO: BookDTO) {
+        FirebaseHelper.uploadBookDTO(bookDTO, {
+            viewState.bookUploadSuccess()
+        }, {
+            viewState.bookRemoveError(bookDTO)
+        })
     }
 }

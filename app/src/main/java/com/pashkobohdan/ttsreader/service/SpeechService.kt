@@ -15,7 +15,7 @@ import android.support.v4.app.NotificationManagerCompat
 import android.view.View
 import android.widget.RemoteViews
 import com.pashkobohdan.ttsreader.R
-import com.pashkobohdan.ttsreader.TTSReaderProApplication
+import com.pashkobohdan.ttsreader.TTSReaderApplication
 import com.pashkobohdan.ttsreader.data.executors.book.GetBookByIdUseCase
 import com.pashkobohdan.ttsreader.data.executors.book.UpdateBookInfoUseCase
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
@@ -73,7 +73,7 @@ class SpeechService : Service(), TtsListener {
     }
 
     override fun onCreate() {
-        TTSReaderProApplication.INSTANCE.applicationComponent.inject(this)
+        TTSReaderApplication.INSTANCE.getApplicationComponent().inject(this)
         super.onCreate()
 
         handler = Handler()

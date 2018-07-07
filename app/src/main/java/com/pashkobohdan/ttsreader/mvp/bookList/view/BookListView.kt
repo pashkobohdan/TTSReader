@@ -37,4 +37,8 @@ interface BookListView : AbstractScreenView<BookListPresenter> {
     fun showBookOpenDialog(file: File)
 
     fun showBookIsAlreadyExistError()
+
+    fun bookUploadError(bookDTO: BookDTO)
+
+    fun bookUploadSuccess()
 }
