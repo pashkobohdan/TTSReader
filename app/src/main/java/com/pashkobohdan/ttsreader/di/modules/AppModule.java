@@ -27,7 +27,10 @@ public class AppModule {
         application.registerActivityLifecycleCallbacks(new EmptyActivityLifecycleCallbacks() {
             @Override
             public void onActivityStarted(Activity activity) {
-                applicationContext = activity;
+                //Fix for ads activity (interstitial)
+                if(activity instanceof MainActivity) {
+                    applicationContext = activity;
+                }
             }
         });
     }

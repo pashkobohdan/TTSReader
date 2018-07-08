@@ -13,6 +13,8 @@ import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
 import com.pashkobohdan.ttsreader.ui.PermissionUtil
 import com.pashkobohdan.ttsreader.ui.Screen
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_PITCH_RATE
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
 import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.fileSystem.file.InternalStorageFileHelper
 import com.pashkobohdan.ttsreader.utils.fileSystem.newFileOpening.core.BookReadingResult
@@ -63,7 +65,7 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
             val newBook = BookDTO(bookReadingResult.bookName, bookReadingResult.bookAuthor,
                     bookReadingResult.bookText,
                     TextSplitter.sentencesCount(bookReadingResult.bookText),
-                    0, 100, 100,
+                    0, DEFAULT_SPEED_RATE, DEFAULT_PITCH_RATE,
                     Date(), Date())
             saveBook(newBook)
         }

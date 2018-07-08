@@ -3,6 +3,8 @@ package com.pashkobohdan.ttsreader.data.cloud
 import com.google.firebase.database.*
 import com.pashkobohdan.ttsreader.data.cloud.model.CloudBookInfo
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_PITCH_RATE
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
 import com.pashkobohdan.ttsreader.utils.TextSplitter
 import java.util.*
 
@@ -53,7 +55,7 @@ object FirebaseHelper {
                 val text = p0.value as String
                 val length = TextSplitter.sentencesCount(text)
                 val bookDto = BookDTO(info.name, info.author,
-                        text, length, 0, 100, 100, Date(), Date())
+                        text, length, 0, DEFAULT_SPEED_RATE, DEFAULT_PITCH_RATE, Date(), Date())
                 readListener(bookDto)
             }
         })

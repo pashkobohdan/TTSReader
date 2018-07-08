@@ -36,9 +36,8 @@ import com.pashkobohdan.ttsreader.utils.TextSplitter
 import javax.inject.Inject
 
 
-class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
+open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 
-    private val TTS_CHECK_CODE_REQUEST_CODE = 1001
     private val HINTS_TIME_MILLIS = 2000L
     private val SPEED_SEEK_BAR_MIN_VALUE = 1
     private val SPEED_SEEK_BAR_MAX_VALUE = 500
@@ -110,28 +109,27 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     fun speedPlusClick() {
         val newValue = Math.min(SPEED_SEEK_BAR_MAX_VALUE, speedSeekBar.progress + 5)
         speedSeekBar.progress = newValue
-        presenter.speedChanged(newValue)
+        tryChangeSpeed(newValue)
     }
 
     @OnClick(R.id.speed_value_minus)
     fun speedMinusClick() {
         val newValue = Math.max(SPEED_SEEK_BAR_MIN_VALUE, speedSeekBar.progress - 5)
         speedSeekBar.progress = newValue
-        presenter.speedChanged(newValue)
+        tryChangeSpeed(newValue)
     }
 
     @OnClick(R.id.pitch_value_plus)
     fun pitchPlusClick() {
         val newValue = Math.min(PITCH_SEEK_BAR_MAX_VALUE, pitchSeekBar.progress + 5)
         pitchSeekBar.progress = newValue
-        presenter.pitchChanged(newValue)
+        tryChangeSpeech(newValue)
     }
 
     @OnClick(R.id.pitch_value_minus)
     fun pitchMinusClick() {
         val newValue = Math.max(PITCH_SEEK_BAR_MIN_VALUE, pitchSeekBar.progress - 5)
         pitchSeekBar.progress = newValue
-        presenter.pitchChanged(newValue)
     }
 
     @ProvidePresenter
@@ -152,11 +150,6 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         return view
     }
 
-    @JvmField
-    @Inject
-    @IsProVersion
-    var  isProVersion :Boolean= false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -164,7 +157,7 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         speedSeekBar.setOnSeekBarChangeListener(object : EmptyOnSeekBarChangeListener() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    presenter.speedChanged(progress + SPEED_SEEK_BAR_MIN_VALUE)
+                    tryChangeSpeed(progress + SPEED_SEEK_BAR_MIN_VALUE)
                 }
             }
         })
@@ -172,7 +165,7 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         pitchSeekBar.setOnSeekBarChangeListener(object : EmptyOnSeekBarChangeListener() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    presenter.pitchChanged(progress + PITCH_SEEK_BAR_MIN_VALUE)
+                    tryChangeSpeech(progress + PITCH_SEEK_BAR_MIN_VALUE)
                 }
             }
         })
@@ -186,6 +179,14 @@ class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
             }
             return@OnEditorActionListener  false;
         })
+    }
+
+    open fun tryChangeSpeech(newPitch: Int) {
+        presenter.pitchChanged(newPitch)
+    }
+
+    open fun tryChangeSpeed(newSpeed: Int) {
+        presenter.speedChanged(newSpeed)
     }
 
     override fun setBookTitle(title: String) {

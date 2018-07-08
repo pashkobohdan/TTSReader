@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 
 
-class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, ProgressUtil {
+open class MainActivity : AppCompatActivity(), ActivityStartable, PermissionUtil, ProgressUtil {
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder

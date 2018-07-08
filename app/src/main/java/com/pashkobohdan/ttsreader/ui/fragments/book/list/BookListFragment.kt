@@ -43,7 +43,7 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Provider
 
-class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), BookListView {
+open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), BookListView {
 
     private val OPEN_PDF_FB2_TXT_FILE = 1000
 
@@ -226,7 +226,7 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     }
 
     override fun showBookList(bookDTOList: List<BookDTO>) {
-        if(bookDTOList.isEmpty()) {
+        if (bookDTOList.isEmpty()) {
             emptyBookListContainer.visibility = View.VISIBLE
             bookListContainer.visibility = View.GONE
         } else {
@@ -265,8 +265,8 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     }
 
     override fun getItemHolder(parent: ViewGroup): AbstractListItemHolder<BookDTO> {
-        return bookListItemWidgetProvider.get().getHolder(parent, Action1{ book -> presenter.openBook(book) }
-        , Action1{ bookDTO ->
+        return bookListItemWidgetProvider.get().getHolder(parent, Action1 { book -> tryOpenBook(book) }
+                , Action1 { bookDTO ->
             DialogUtils.showOptionsDialog("Choose action type", context!!, Arrays.asList(*BookActionType.values()),
                     { action ->
                         when (action) {
@@ -280,12 +280,16 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
                 when (action) {
                     BookActionType.DELETE -> presenter.deleteBook(bookDTO)
                     BookActionType.EDIT -> presenter.editBook(bookDTO)
-                    BookActionType.OPEN -> presenter.openBook(bookDTO)
+                    BookActionType.OPEN -> tryOpenBook(bookDTO)
                     BookActionType.UPLOAD_TO_PUBLIC_CLOUD -> presenter.uploadToStorage(bookDTO)
                     else -> throw IllegalArgumentException("Unsupported book action: " + action.name)
                 }
             }, true)
         })
+    }
+
+    open fun tryOpenBook(book: BookDTO) {
+        presenter.openBook(book)
     }
 
     override fun bookSaveSuccess() {
@@ -316,11 +320,5 @@ class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>(), Boo
     override fun bookUploadSuccess() {
         Snackbar.make(addBookActionMenu, "Book was successfully uploaded to cloud",
                 Snackbar.LENGTH_LONG).show()
-    }
-
-    companion object {
-
-        val newInstance: BookListFragment
-            get() = BookListFragment()
     }
 }

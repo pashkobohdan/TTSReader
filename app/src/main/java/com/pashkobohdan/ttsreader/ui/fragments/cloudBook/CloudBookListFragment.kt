@@ -26,7 +26,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 
-class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, CloudBookInfo>(), CloudBookListView {
+open class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, CloudBookInfo>(), CloudBookListView {
 
     @Inject
     lateinit var cloudBookListItemWidgetProvider: Provider<CloudBookListItemWidget>
@@ -63,6 +63,7 @@ class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, Cloud
         bookListRecyclerView.layoutManager = mLayoutManager
         bookListRecyclerView.adapter = adapter
 
+        setRightHeaderView(createImageHeaderButton(R.drawable.refresh, presenter::refresh))
         addLeftHeaderView(createBackHeaderButton())
         setHeaderTitle("Book Cloud")
     }

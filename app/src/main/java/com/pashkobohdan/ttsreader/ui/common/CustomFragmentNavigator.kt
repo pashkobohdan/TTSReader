@@ -15,7 +15,7 @@ class CustomFragmentNavigator(val fragmentProvider: FragmentProvider,
                               val fragmentManager: FragmentManager,
                               val containerId: Int) : SupportFragmentNavigator(fragmentManager, containerId) {
 
-    private val CLICK_AGAIN_TO_EXIT_TIME = 2 * 1000000000
+    private val CLICK_AGAIN_TO_EXIT_TIME = 2 * 1000
 
     private var lastTryExitTime = 0L
 
@@ -30,7 +30,8 @@ class CustomFragmentNavigator(val fragmentProvider: FragmentProvider,
                     .addToBackStack(screen)
                     .commit()
         } else if (command is Back) {
-            if (fragmentManager.backStackEntryCount > 0) {
+            val backStackCount = fragmentManager.backStackEntryCount
+            if (backStackCount > 0) {
                 fragmentManager.popBackStackImmediate()
             } else {
                 exit()
@@ -87,7 +88,7 @@ class CustomFragmentNavigator(val fragmentProvider: FragmentProvider,
     }
 
     override fun exit() {
-        val currentTime = System.nanoTime()
+        val currentTime = System.currentTimeMillis()
         if (currentTime - lastTryExitTime < CLICK_AGAIN_TO_EXIT_TIME) {
             activity.finish()
         } else {

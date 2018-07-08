@@ -1,6 +1,10 @@
 package com.pashkobohdan.ttsreader.utils;
 
 public class Constants {
+
+    public static final int DEFAULT_PITCH_RATE = 100;
+    public static final int DEFAULT_SPEED_RATE = 100;
+
     public static final String EMPTY = "";
     public static final String DOT = ".";
     public static final String TXT_FORMAT = ".txt";
@@ -10,7 +14,6 @@ public class Constants {
 
     public static String OPEN_BOOK_ACTION = "com.pashkobohdan.ttsreader.action.openbookaction";
     public static String OPEN_BOOK_ACTION_BOOK_ID_KEY = "com.pashkobohdan.ttsreader.action.openbookaction_bookidkey";
-    public static String INIT_ACTION = "com.pashkobohdan.ttsreader.action.init";
     public static String PREV_ACTION = "com.pashkobohdan.ttsreader.action.prev";
     public static String PLAY_ACTION = "com.pashkobohdan.ttsreader.action.play";
     public static String PAUSE_ACTION = "com.pashkobohdan.ttsreader.action.pause";

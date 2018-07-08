@@ -16,14 +16,7 @@ class CloudBookListPresenter @Inject constructor(): AbstractPresenter<CloudBookL
     lateinit var saveBookUseCase: SaveBookUseCase
 
     override fun onFirstViewAttach() {
-        viewState.showProgress()
-        FirebaseHelper.readBooksInfo({ bookInfoList ->
-            viewState.showBookList(bookInfoList)
-            viewState.hideProgress()
-        }, {
-            viewState.showBookListLoadError()
-            viewState.hideProgress()
-        })
+        refresh()
     }
 
     fun downloadBook(bookInfo: CloudBookInfo) {
@@ -53,5 +46,16 @@ class CloudBookListPresenter @Inject constructor(): AbstractPresenter<CloudBookL
 
     fun showDetail(bookInfo: CloudBookInfo) {
         viewState.showBookText(bookInfo.name, bookInfo.text)
+    }
+
+    fun refresh() {
+        viewState.showProgress()
+        FirebaseHelper.readBooksInfo({ bookInfoList ->
+            viewState.showBookList(bookInfoList)
+            viewState.hideProgress()
+        }, {
+            viewState.showBookListLoadError()
+            viewState.hideProgress()
+        })
     }
 }

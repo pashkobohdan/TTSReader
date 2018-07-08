@@ -6,6 +6,7 @@ import com.pashkobohdan.ttsreader.di.DaggerApplicationComponent
 import com.pashkobohdan.ttsreader.di.modules.AppModule
 import com.pashkobohdan.ttsreader.di.modules.DatabaseModule
 import com.pashkobohdan.ttsreader.free.di.modules.FreeSettingsModule
+import com.pashkobohdan.ttsreader.free.di.modules.FreeUiModule
 
 class TTSReaderFreeApplication : TTSReaderApplication() {
 
@@ -16,6 +17,7 @@ class TTSReaderFreeApplication : TTSReaderApplication() {
                     .appModule(AppModule(this))
                     .databaseModule(DatabaseModule(this))
                     .settingsModule(FreeSettingsModule())
+                    .uiModule(FreeUiModule())
                     .build()
         }
         return component!!

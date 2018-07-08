@@ -23,6 +23,8 @@ interface TtsListener {
 
     fun currentPageSelected(page: Int)
 
+    fun moveToStartOfBook()
+
     fun resume()
 
     fun pause()

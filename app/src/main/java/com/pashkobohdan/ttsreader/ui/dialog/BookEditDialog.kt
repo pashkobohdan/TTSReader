@@ -13,6 +13,8 @@ import butterknife.OnClick
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.ui.LabelUtils
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_PITCH_RATE
+import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
 import com.pashkobohdan.ttsreader.utils.NullUtils
 import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.ValidationResult
@@ -103,7 +105,7 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
                 val text = textEditText.text.toString()
                 val length = TextSplitter.sentencesCount(text)
                 newBook = BookDTO(nameEditText.text.toString(), authorEditText.text.toString(),
-                        text, length, 0, 100, 100, Date(), Date())
+                        text, length, 0, DEFAULT_SPEED_RATE, DEFAULT_PITCH_RATE, Date(), Date())
             } else {
                 newBook.name = nameEditText.text.toString()
                 newBook.author = authorEditText.text.toString()

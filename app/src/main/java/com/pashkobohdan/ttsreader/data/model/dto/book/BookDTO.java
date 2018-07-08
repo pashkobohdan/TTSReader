@@ -34,20 +34,6 @@ public class BookDTO extends CommonDTO {
     }
 
     @Ignore
-    public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Integer readingPitch, String createDateString, String lastOpenDateString) {
-        this.name = name;
-        this.author = author;
-        this.text = text;
-        this.length = length;
-        this.progress = progress;
-        this.readingSpeed = readingSpeed;
-        this.readingPitch = readingPitch;
-        this.createDateString = createDateString;
-        this.lastOpenDateString = lastOpenDateString;
-        id = System.currentTimeMillis();
-    }
-
-    @Ignore
     public BookDTO(String name, String author, String text, Integer length, Integer progress, Integer readingSpeed, Integer readingPitch, Date createDate, Date lastOpenDate) {
         this.name = name;
         this.author = author;

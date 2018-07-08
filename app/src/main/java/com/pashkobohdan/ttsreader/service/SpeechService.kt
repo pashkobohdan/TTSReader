@@ -331,6 +331,14 @@ class SpeechService : Service(), TtsListener {
         }
     }
 
+    override fun moveToStartOfBook() {
+        readingPosition = 0
+        currentPage = text[0]
+        currentSentence = currentPage[0]
+        initPageText()
+        if (readingState == BookPresenter.READING_STATE.READING) pause()
+    }
+
     private fun findPrevNextAndCurrentText(): ReadingText {
         val currentSentenceIndex = currentPage.indexOf(currentSentence)
         val prevText = StringBuilder()

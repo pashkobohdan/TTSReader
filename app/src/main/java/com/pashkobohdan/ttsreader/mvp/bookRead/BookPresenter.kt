@@ -119,10 +119,8 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
         service?.pause()
     }
 
-    fun readBookFromStart() { // TODO !!!
-//        currentPage = text[0]
-//        currentSentence = currentPage[0]
-//        initPageText()
+    fun readBookFromStart() {
+        service?.moveToStartOfBook()
     }
 
     fun startBookPageMode() {
