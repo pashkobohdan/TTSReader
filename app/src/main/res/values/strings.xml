@@ -70,7 +70,7 @@
     <string name="start_of_book_message">This is start of book</string>
     <string name="tts_init_error_message">Cannot init TTS reader. Install TTS from google play and try again later</string>
     <string name="book_reading_error_message">Book reading error</string>
-    <string name="no_available_languages">There\'s no avalable languages on your device</string>
+    <string name="no_available_languages">There\'s no available languages on your device</string>
     <string name="select_languages">Select language</string>
     <string name="book_cloud_header">Book Cloud</string>
     <string name="books_downoading_error_message">Failure while downloading books</string>
