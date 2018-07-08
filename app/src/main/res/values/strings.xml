@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">TTS Reader</string>
+    <string name="app_name">TTS Reader</string>
     <string name="image_of_book">Image of book</string>
     <string name="add_book">Add book</string>
     <string name="add_book_from_file">Open file</string>

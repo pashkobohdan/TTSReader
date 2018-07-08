@@ -22,8 +22,7 @@ class FreeBookListFragment : BookListFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO remove test device
-        val adRequest = AdRequest.Builder().addTestDevice("2EF6C016D7BEC7434A20FC330D5CF434").build()
+        val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
         mInterstitialAd = InterstitialAd(context)
@@ -37,8 +36,7 @@ class FreeBookListFragment : BookListFragment(){
     }
 
     private fun reloadInterstitialAd() {
-        //TODO remove test device
-        mInterstitialAd.loadAd(AdRequest.Builder().addTestDevice("2EF6C016D7BEC7434A20FC330D5CF434").build())
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
 
     override fun tryOpenBook(book: BookDTO) {

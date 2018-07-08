@@ -2,6 +2,12 @@ package com.pashkobohdan.ttsreader.free.ui.fragments.book.reading
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.View
+import butterknife.BindView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.free.utils.FreeVersionConstants.AVAILABLE_PITCH_FREE_CHANGE
 import com.pashkobohdan.ttsreader.free.utils.FreeVersionConstants.AVAILABLE_SPEED_FREE_CHANGE
 import com.pashkobohdan.ttsreader.free.utils.FreeVersionConstants.PRO_VERSION_PACKAGE_NAME
@@ -12,6 +18,17 @@ import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
 
 
 class FreeBookFragment : BookFragment() {
+
+    @BindView(R.id.adView)
+    lateinit var mAdView : AdView
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
 
     override fun tryChangeSpeech(newPitch: Int) {
         if (newPitch >= DEFAULT_PITCH_RATE - AVAILABLE_PITCH_FREE_CHANGE

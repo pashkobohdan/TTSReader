@@ -1,0 +1,311 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/header_layout" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:id="@id/current_book_settings_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/speed_rate" />
+
+                <ImageView
+                    android:id="@+id/speed_value_minus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/action_minus" />
+
+                <SeekBar
+                    android:id="@id/speed_rate_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/speed_value_plus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/action_plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/pitch" />
+
+                <ImageView
+                    android:id="@+id/pitch_value_minus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/action_minus" />
+
+                <SeekBar
+                    android:id="@id/pitch_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/pitch_value_plus"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/action_plus" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v4.view.ViewPager
+        android:id="@id/current_book_book_mode_root"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@id/current_book_reading_mode_root"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@id/current_book_hints_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/click_to_start_pause"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@id/current_book_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.1"
+            android:clickable="false"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@id/current_book_before_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:ellipsize="start"
+                android:gravity="bottom"
+                tools:text="Today we will discuss about how can we set click listener for some part of your TextView.
+As you all know we can set click listener on textview like we use to set in other controls(Button, ImageView etc). But what if i want listener for some text only. For example “This is demo android program”, now i want click listener just for “android” word. Yes this is possible with using ClickableSpan.
+If object of ClickableSpan is attached with TextView with a movement method of LinkmovementMethod, text click will call onClick(View) method. Here you are done, whenever you click on”android”, onClick() method of ClickableSpan will be called.
+Let’s see one example program for more than one click listener on TextView." />
+
+            <TextView
+                android:id="@id/current_book_current_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#388E3C"
+                android:textSize="20sp"
+                tools:text="Now reading text. \nBla Bla bla.\n End of now reading text" />
+
+            <TextView
+                android:id="@id/current_book_after_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                tools:text="Today we will discuss about how can we set click listener for some part of your TextView.
+As you all know we can set click listener on textview like we use to set in other controls(Button, ImageView etc). But what if i want listener for some text only. For example “This is demo android program”, now i want click listener just for “android” word. Yes this is possible with using ClickableSpan.
+If object of ClickableSpan is attached with TextView with a movement method of LinkmovementMethod, text click will call onClick(View) method. Here you are done, whenever you click on”android”, onClick() method of ClickableSpan will be called.
+Let’s see one example program for more than one click listener on TextView." />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:id="@id/current_book_navigation_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@id/current_book_back_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/back" />
+
+                <ImageButton
+                    android:id="@id/current_book_play_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/play" />
+
+                <ImageButton
+                    android:id="@id/current_book_pause_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/pause"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageButton
+                    android:id="@id/current_book_next_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/next" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@id/current_book_book_mode"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/button_bg"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/book_mode" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@id/current_book_book_mode_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp">
+
+                <EditText
+                    android:id="@id/current_book_book_mode_current_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/page"
+                    android:imeOptions="actionGo"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:minWidth="30dp"
+                    android:textColor="@color/colorAccent"
+                    tools:text="345" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/page_delimiter" />
+
+                <TextView
+                    android:id="@id/current_book_book_mode_page_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    tools:text="456" />
+            </LinearLayout>
+
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5629629863028147/2352307156"/>
+
+</LinearLayout>

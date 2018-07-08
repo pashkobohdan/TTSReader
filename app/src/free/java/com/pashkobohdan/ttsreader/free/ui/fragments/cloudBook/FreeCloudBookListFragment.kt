@@ -16,8 +16,7 @@ class FreeCloudBookListFragment : CloudBookListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO remove test device
-        val adRequest = AdRequest.Builder().addTestDevice("2EF6C016D7BEC7434A20FC330D5CF434").build()
+        val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
     }
 }
