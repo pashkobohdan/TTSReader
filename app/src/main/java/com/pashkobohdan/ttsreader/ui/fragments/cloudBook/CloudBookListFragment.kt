@@ -65,7 +65,7 @@ open class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, 
 
         setRightHeaderView(createImageHeaderButton(R.drawable.refresh, presenter::refresh))
         addLeftHeaderView(createBackHeaderButton())
-        setHeaderTitle("Book Cloud")
+        setHeaderTitle(getString(R.string.book_cloud_header))
     }
 
     override fun getItemHolder(parent: ViewGroup): AbstractListItemHolder<CloudBookInfo> {
@@ -76,22 +76,22 @@ open class CloudBookListFragment : AbstractListFragment<CloudBookListPresenter, 
     }
 
     override fun showBookListLoadError() {
-        Snackbar.make(view!!, "Failure while downloading books",
+        Snackbar.make(view!!, getString(R.string.books_downoading_error_message),
                 Snackbar.LENGTH_LONG).show()
     }
 
     override fun showBookDownloadError() {
-        Snackbar.make(view!!, "Failure while downloading book text",
+        Snackbar.make(view!!, getString(R.string.book_text_downloading_error_message),
                 Snackbar.LENGTH_LONG).show()
     }
 
     override fun showBookDownloadSuccessful() {
-        Snackbar.make(view!!, "Book is saved successfully",
+        Snackbar.make(view!!, getString(R.string.book_save_success_message),
                 Snackbar.LENGTH_LONG).show()
     }
 
     override fun bookSaveError(bookDTO: BookDTO) {
-        Snackbar.make(view!!, "Failure while saving book",
+        Snackbar.make(view!!, getString(R.string.book_save_error_message),
                 Snackbar.LENGTH_LONG).show()
     }
 

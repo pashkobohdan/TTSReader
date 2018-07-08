@@ -97,7 +97,7 @@ abstract class AbstractScreenFragment<T : AbstractPresenter<*>> : MvpAppCompatFr
         rightHeaderContainer?.addView(view)
     }
 
-    protected fun cleanRightHeaderContainer() {
+    protected open fun cleanRightHeaderContainer() {
         rightHeaderContainer?.removeAllViews()
     }
 
@@ -108,6 +108,11 @@ abstract class AbstractScreenFragment<T : AbstractPresenter<*>> : MvpAppCompatFr
     protected fun createBackHeaderButton(callback: () -> Unit = this::onBackNavigation): View {
         val back = LayoutInflater.from(context).inflate(R.layout.header_back_action, null)
         back.setOnClickListener({ callback() })
+        return back
+    }
+
+    protected fun createEmptyHeaderButton(): View {
+        val back = LayoutInflater.from(context).inflate(R.layout.header_image_action, null)
         return back
     }
 

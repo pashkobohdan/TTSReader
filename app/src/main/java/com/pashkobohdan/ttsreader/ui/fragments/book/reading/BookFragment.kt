@@ -23,7 +23,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.pashkobohdan.ttsreader.R
 import com.pashkobohdan.ttsreader.TTSReaderApplication
-import com.pashkobohdan.ttsreader.annotations.IsProVersion
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.service.SpeechService
@@ -33,7 +32,7 @@ import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.listener.EmptyOnSeekBarChangeListener
 import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.TextSplitter
-import javax.inject.Inject
+import java.util.*
 
 
 open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
@@ -177,7 +176,7 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
                 presenter.goToPage(currentPageInput.text.toString().toInt())
                 return@OnEditorActionListener true;
             }
-            return@OnEditorActionListener  false;
+            return@OnEditorActionListener false;
         })
     }
 
@@ -199,7 +198,6 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 val binder = service as SpeechService.TTSBinder
                 presenter.serviceCreated(binder.service)
-                //TODO
             }
 
             override fun onServiceDisconnected(name: ComponentName) {
@@ -247,6 +245,9 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 
     override fun endPagesMode() {
         cleanRightHeaderContainer()
+        setRightHeaderView(createImageHeaderButton(R.drawable.change_language, {
+            presenter.changeLanguage()
+        }))
         bookModePagesContainer.visibility = View.GONE
         navigationContainer.visibility = View.VISIBLE
         settingsContainer.visibility = View.VISIBLE
@@ -279,28 +280,43 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
     }
 
     override fun showEmptyBookError() {
-        DialogUtils.showAlert("Error", "Book is empty", context
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.book_is_empty), context
                 ?: throw IllegalStateException("Context is null"), { })
     }
 
     override fun showEndOfBookAlert() {
-        DialogUtils.showAlert("Error", "Book is end. Start the book again ?", context
+        DialogUtils.showAlert(null, getString(R.string.end_of_book_message), context
                 ?: throw IllegalStateException("Context is null"), presenter::readBookFromStart, { })
     }
 
     override fun showStartOfBookAlert() {
-        DialogUtils.showAlert("Error", "This is start of book", context
+        DialogUtils.showAlert(null, getString(R.string.start_of_book_message), context
                 ?: throw IllegalStateException("Context is null"), { })
     }
 
     override fun showTtsReaderInitError() {
-        DialogUtils.showAlert("Error", "Cannot init TTS reader. Install TTS from google play and try again later", context
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.tts_init_error_message), context
                 ?: throw IllegalStateException("Context is null"), { })
     }
 
     override fun showBookExecutingError() {
-        DialogUtils.showAlert("Error", "Book executing error. Try later", context
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.book_reading_error_message), context
                 ?: throw IllegalStateException("Context is null"), { })
+    }
+
+    override fun shoNoAvailableLanguagesError() {
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.no_available_languages), context
+                ?: throw IllegalStateException("Context is null"), { })
+    }
+
+    override fun showSelectLanguageDialog(languages: List<Locale>) {
+        DialogUtils.showOptionsDialog(getString(R.string.select_languages)
+                , context ?: throw IllegalStateException("Context is null")
+                , languages, {
+            it.displayLanguage
+        }, {
+            presenter.languageChanged(it)
+        }, true)
     }
 
     override fun showProgress() {
@@ -344,8 +360,6 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
 
     override fun onDestroy() {
         ttsConnection?.let { activity?.unbindService(ttsConnection) }
-//        stopSpeeching();
-//        textToSpeech.shutdown(); // TODO replace with service !
         super.onDestroy()
     }
 

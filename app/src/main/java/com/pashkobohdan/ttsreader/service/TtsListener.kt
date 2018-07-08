@@ -2,6 +2,7 @@ package com.pashkobohdan.ttsreader.service
 
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.data.model.utils.ReadingText
+import java.util.*
 
 interface TtsListener {
 
@@ -18,6 +19,10 @@ interface TtsListener {
                                pauseCallback: () -> Unit,
                                textReadingError: () -> Unit,
                                endOfTextCallback: () -> Unit)
+
+    fun getAvailableLanguages(): List<Locale>?
+
+    fun changeReadingLanguage(locale: Locale)
 
     fun changeBookInfo(speechRate: Int, pitchRate: Int)
 

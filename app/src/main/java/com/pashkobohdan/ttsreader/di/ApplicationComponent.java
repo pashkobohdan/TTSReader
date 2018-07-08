@@ -4,6 +4,7 @@ import com.pashkobohdan.ttsreader.di.modules.AppModule;
 import com.pashkobohdan.ttsreader.di.modules.DatabaseModule;
 import com.pashkobohdan.ttsreader.di.modules.NavigationModule;
 import com.pashkobohdan.ttsreader.di.modules.SettingsModule;
+import com.pashkobohdan.ttsreader.di.modules.StorageModule;
 import com.pashkobohdan.ttsreader.di.modules.UiModule;
 import com.pashkobohdan.ttsreader.service.SpeechService;
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity;
@@ -20,7 +21,8 @@ import dagger.Component;
         DatabaseModule.class,
         NavigationModule.class,
         SettingsModule.class,
-        UiModule.class
+        UiModule.class,
+        StorageModule.class
 })
 @Singleton
 public interface ApplicationComponent {

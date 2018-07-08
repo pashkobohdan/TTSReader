@@ -6,6 +6,7 @@ import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
 import com.pashkobohdan.ttsreader.service.TtsListener
 import com.pashkobohdan.ttsreader.utils.TextSplitter
+import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
@@ -153,6 +154,19 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
         } else {
             return page - 1
         }
+    }
+
+    fun changeLanguage() {
+        val languages = service?.getAvailableLanguages()
+        if(languages == null) {
+            viewState.shoNoAvailableLanguagesError()
+        }else {
+            viewState.showSelectLanguageDialog(languages)
+        }
+    }
+
+    fun languageChanged(locale: Locale) {
+        service?.changeReadingLanguage(locale)
     }
 
     override fun backNavigation() {

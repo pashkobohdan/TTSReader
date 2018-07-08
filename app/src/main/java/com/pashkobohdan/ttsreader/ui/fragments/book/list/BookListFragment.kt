@@ -92,7 +92,6 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     override fun onCreate(savedInstanceState: Bundle?) {
         TTSReaderApplication.INSTANCE.getApplicationComponent().inject(this)
         super.onCreate(savedInstanceState)
-        //        setRetainInstance(true);
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,6 +103,7 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        addLeftHeaderView(createEmptyHeaderButton())
         setRightHeaderView(createImageHeaderButton(R.drawable.refresh, {
             presenter.refresh()
         }))
@@ -125,12 +125,13 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
             }
         })
 
-        setHeaderTitle("Book list")
+        setHeaderTitle(getString(R.string.book_list_header))
     }
 
     override fun showFileOpenerChooser() {
-        DialogUtils.showAlert("File open", "Choose file manager",
-                "Custom (app) file manager", "System file manager", context!!,
+        DialogUtils.showAlert(getString(R.string.file_opener), getString(R.string.choose_file_manage)
+                , getString(R.string.custom_file_manager)
+                , getString(R.string.system_file_manager), context!!,
                 this::openCustomFileManager, this::openSystemFileManager)
     }
 
@@ -139,7 +140,7 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
                 FileChooserDialog.ChooserListener {
                     presenter.openNewBookSelected(File(it))
                 })
-                .setTitle("Select a file")
+                .setTitle(getString(R.string.select_file))
                 .setFileFormats(arrayOf(Constants.TXT_FORMAT, Constants.PDF_FORMAT,
                         Constants.FB2_FORMAT, Constants.EPUB_FORMAT))
 
@@ -154,7 +155,7 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
 
             try {
                 activityStartable.startActivityForResult(OPEN_PDF_FB2_TXT_FILE,
-                        Intent.createChooser(intent, "Выберите pdf, txt, fb2 файл"),
+                        Intent.createChooser(intent, getString(R.string.choose_file_of_setted_types)),
                         { intent, resultCode ->
                             if (resultCode == Activity.RESULT_OK && intent != null) {
                                 val myFile = File(getRealPathFromURI(intent.getData()))
@@ -167,16 +168,16 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
                                     presenter.openNewBookSelected(myFile)
                                 } else {
                                     AlertDialog.Builder(context)
-                                            .setTitle("Error")
-                                            .setMessage("Choose correct file")
+                                            .setTitle(getString(R.string.error))
+                                            .setMessage(getString(R.string.choose_correct_file))
                                             .create()
                                             .show()
                                 }
 
                             } else {
                                 AlertDialog.Builder(context)
-                                        .setTitle("Error")
-                                        .setMessage("Choose correct file")
+                                        .setTitle(getString(R.string.error))
+                                        .setMessage(getString(R.string.choose_correct_file))
                                         .create()
                                         .show()
                             }
@@ -193,8 +194,8 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
 
     override fun showBookOpenDialog(file: File) {
         val pd = ProgressDialog(context)
-        pd.setTitle("Reading")
-        pd.setMessage("Please, wait while book is loading")
+        pd.setTitle(getString(R.string.reading))
+        pd.setMessage(getString(R.string.book_reading_waiter))
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         pd.max = 100
         pd.progress = 0
@@ -202,7 +203,6 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
         pd.setCancelable(false)
         pd.show()
 
-        //TODO to presenter
         FileOpenThread(file, activity!!, { o, n ->
             pd.isIndeterminate = false
             pd.progress = n
@@ -214,7 +214,7 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     private fun getRealPathFromURI(contentURI: Uri?): String {
         val result: String
         val cursor = context?.contentResolver?.query(contentURI!!, null, null, null, null)
-        if (cursor == null) { // Source is Dropbox or other similar local file path
+        if (cursor == null) {
             result = contentURI?.path ?: Constants.EMPTY
         } else {
             cursor.moveToFirst()
@@ -247,12 +247,12 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     }
 
     override fun showGetBookListError() {
-        DialogUtils.showAlert("Error", "Data execution error, try later", context
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.books_reading_error), context
                 ?: throw IllegalStateException("Context is null"), { })
     }
 
     override fun showBookIsAlreadyExistError() {
-        DialogUtils.showAlert("Error", "Book with it's name is already exist. Try later", context
+        DialogUtils.showAlert(getString(R.string.error), getString(R.string.same_book_is_exist), context
                 ?: throw IllegalStateException("Context is null"), { })
     }
 
@@ -267,13 +267,13 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     override fun getItemHolder(parent: ViewGroup): AbstractListItemHolder<BookDTO> {
         return bookListItemWidgetProvider.get().getHolder(parent, Action1 { book -> tryOpenBook(book) }
                 , Action1 { bookDTO ->
-            DialogUtils.showOptionsDialog("Choose action type", context!!, Arrays.asList(*BookActionType.values()),
+            DialogUtils.showOptionsDialog(getString(R.string.choose_action_type), context!!, Arrays.asList(*BookActionType.values()),
                     { action ->
                         when (action) {
-                            BookActionType.DELETE -> "Delete"
-                            BookActionType.EDIT -> "Edit"
-                            BookActionType.OPEN -> "Open"
-                            BookActionType.UPLOAD_TO_PUBLIC_CLOUD -> "Upload to cloud"
+                            BookActionType.DELETE -> getString(R.string.delete)
+                            BookActionType.EDIT -> getString(R.string.edit)
+                            BookActionType.OPEN -> getString(R.string.open)
+                            BookActionType.UPLOAD_TO_PUBLIC_CLOUD -> getString(R.string.upload_to_cloud)
                             else -> Constants.EMPTY
                         }
                     }, { action ->
@@ -293,32 +293,32 @@ open class BookListFragment : AbstractListFragment<BookListPresenter, BookDTO>()
     }
 
     override fun bookSaveSuccess() {
-        Snackbar.make(addBookActionMenu, "Book is saved successfully",
+        Snackbar.make(addBookActionMenu, getString(R.string.book_save_success_message),
                 Snackbar.LENGTH_LONG).show()
     }
 
     override fun bookSaveError(bookDTO: BookDTO) {
-        Snackbar.make(addBookActionMenu, "Failure while saving book",
-                Snackbar.LENGTH_LONG).setAction("Try again") { presenter::saveBook }.show()
+        Snackbar.make(addBookActionMenu, getString(R.string.book_saving_error_message),
+                Snackbar.LENGTH_LONG).setAction(getString(R.string.try_again)) { presenter::saveBook }.show()
     }
 
     override fun bookRemoveSuccess() {
-        Snackbar.make(addBookActionMenu, "Book is deleted successfully",
+        Snackbar.make(addBookActionMenu, getString(R.string.book_delete_success_message),
                 Snackbar.LENGTH_LONG).show()
     }
 
     override fun bookRemoveError(bookDTO: BookDTO) {
-        Snackbar.make(addBookActionMenu, "Failure while deleting book",
-                Snackbar.LENGTH_LONG).setAction("Try again") { presenter::deleteBook }.show()
+        Snackbar.make(addBookActionMenu, getString(R.string.book_delete_error_message),
+                Snackbar.LENGTH_LONG).setAction(getString(R.string.try_again)) { presenter::deleteBook }.show()
     }
 
     override fun bookUploadError(bookDTO: BookDTO) {
-        Snackbar.make(addBookActionMenu, "Failure while uploading book",
-                Snackbar.LENGTH_LONG).setAction("Try again") { presenter.uploadToStorage(bookDTO) }.show()
+        Snackbar.make(addBookActionMenu, getString(R.string.book_upload_error_message),
+                Snackbar.LENGTH_LONG).setAction(getString(R.string.try_again)) { presenter.uploadToStorage(bookDTO) }.show()
     }
 
     override fun bookUploadSuccess() {
-        Snackbar.make(addBookActionMenu, "Book was successfully uploaded to cloud",
+        Snackbar.make(addBookActionMenu, getString(R.string.book_upload_success_message),
                 Snackbar.LENGTH_LONG).show()
     }
 }

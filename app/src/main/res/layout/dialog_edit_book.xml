@@ -17,10 +17,10 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/book_edit_dialog_book_name_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/book_name_hint">
+                android:layout_height="wrap_content">
 
                 <EditText
+                    android:hint="@string/book_name_hint"
                     android:id="@+id/book_edit_dialog_book_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -31,10 +31,10 @@
                 android:id="@+id/book_edit_dialog_book_author_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/book_author_hint">
+                android:layout_marginTop="16dp">
 
                 <EditText
+                    android:hint="@string/book_author_hint"
                     android:id="@+id/book_edit_dialog_book_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -45,10 +45,10 @@
                 android:id="@+id/book_edit_dialog_book_text_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/book_text_hint">
+                android:layout_marginTop="16dp">
 
                 <EditText
+                    android:hint="@string/book_text_hint"
                     android:id="@+id/book_edit_dialog_book_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,17 +58,17 @@
             </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:layout_gravity="end"
-                android:clickable="true"
                 android:id="@+id/edit_book_text_button"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:textColor="@color/colorAccent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit text"
-                android:focusable="true" />
+                android:layout_gravity="end"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:padding="5dp"
+                android:text="@string/edit_book_text"
+                android:textColor="@color/colorAccent" />
         </LinearLayout>
 
     </ScrollView>

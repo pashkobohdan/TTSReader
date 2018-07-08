@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TTS Reader</string>
+    <string name="app_name" translatable="false">TTS Reader</string>
     <string name="image_of_book">Image of book</string>
     <string name="add_book">Add book</string>
     <string name="add_book_from_file">Open file</string>
@@ -25,6 +25,56 @@
 
     <string name="unknown_error">Unknown error</string>
 
-    <string name="file_choosing_dialog_cancel_confirm">Do you want to cancel creating of the book ? All data will be deleted.</string>
+    <string name="file_choosing_dialog_cancel_confirm">Do you want to cancel opening of the book ?</string>
+    <string name="edit_book_text">Edit text</string>
+    <string name="speed_rate">Speed rate</string>
+    <string name="pitch">Pitch</string>
+    <string name="click_to_start_pause">Click to start</string>
+    <string name="page">Page</string>
 
+    <string name="page_delimiter" translatable="false"> / </string>
+    <string name="you_haven_t_any_book">You haven\'t any book</string>
+    <string name="back">Back</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="show_info">Show info</string>
+    <string name="download">Download</string>
+    <string name="book_list_header">Book list</string>
+    <string name="file_opener">File opener</string>
+    <string name="choose_file_manage">Choose file manager</string>
+    <string name="custom_file_manager">App file manager</string>
+    <string name="system_file_manager">System file manager</string>
+    <string name="select_file">Select a file</string>
+    <string name="choose_file_of_setted_types">Choose pdf, txt, epub, fb2 file</string>
+    <string name="error">Error</string>
+    <string name="choose_correct_file">Choose correct file</string>
+    <string name="reading">Reading</string>
+    <string name="book_reading_waiter">Please, wait while book is loading</string>
+    <string name="books_reading_error">Book reading error</string>
+    <string name="same_book_is_exist">Book with it\'s name is already exist. Try later</string>
+    <string name="choose_action_type">Choose action</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="open">Open</string>
+    <string name="upload_to_cloud">Upload to cloud</string>
+    <string name="book_saving_error_message">Failure while saving book</string>
+    <string name="book_delete_success_message">Book is deleted successfully</string>
+    <string name="book_delete_error_message">Failure while deleting book</string>
+    <string name="book_upload_error_message">Failure while uploading book</string>
+    <string name="book_upload_success_message">Book was successfully uploaded to cloud</string>
+    <string name="try_again">Try again</string>
+    <string name="book_is_empty">Book is empty</string>
+    <string name="end_of_book_message">Book is end. Start the book again ?</string>
+    <string name="start_of_book_message">This is start of book</string>
+    <string name="tts_init_error_message">Cannot init TTS reader. Install TTS from google play and try again later</string>
+    <string name="book_reading_error_message">Book reading error</string>
+    <string name="no_available_languages">There\'s no avalable languages on your device</string>
+    <string name="select_languages">Select language</string>
+    <string name="book_cloud_header">Book Cloud</string>
+    <string name="books_downoading_error_message">Failure while downloading books</string>
+    <string name="book_text_downloading_error_message">Failure while downloading book text</string>
+    <string name="book_save_success_message">Book is saved successfully. Refresh book list</string>
+    <string name="book_save_error_message">Failure while saving book</string>
 </resources>

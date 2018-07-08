@@ -26,32 +26,32 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Speed rate"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:text="@string/speed_rate" />
 
                 <ImageView
                     android:id="@+id/speed_value_minus"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/action_minus"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:src="@drawable/action_minus" />
 
                 <SeekBar
                     android:id="@id/speed_rate_setting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:layout_weight="3"
+                    android:layout_gravity="center_vertical" />
 
                 <ImageView
                     android:id="@+id/speed_value_plus"
@@ -65,39 +65,39 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Pitch"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:text="@string/pitch" />
 
                 <ImageView
                     android:id="@+id/pitch_value_minus"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/action_minus"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:src="@drawable/action_minus" />
 
                 <SeekBar
                     android:id="@id/pitch_setting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:layout_weight="3"
+                    android:layout_gravity="center_vertical" />
 
                 <ImageView
                     android:id="@+id/pitch_value_plus"
@@ -120,7 +120,6 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-
     <FrameLayout
         android:id="@id/current_book_reading_mode_root"
         android:layout_width="match_parent"
@@ -133,6 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
             android:visibility="gone"
             tools:visibility="visible">
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="Click to start / pause"
+                android:text="@string/click_to_start_pause"
                 android:textSize="20sp" />
         </FrameLayout>
 
@@ -156,10 +156,10 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@id/current_book_before_text"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:ellipsize="start"
                 android:gravity="bottom"
@@ -177,10 +177,10 @@ Let’s see one example program for more than one click listener on TextView." /
                 tools:text="Now reading text. \nBla Bla bla.\n End of now reading text" />
 
             <TextView
-                android:layout_marginBottom="5dp"
                 android:id="@id/current_book_after_text"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 tools:text="Today we will discuss about how can we set click listener for some part of your TextView.
@@ -273,6 +273,7 @@ Let’s see one example program for more than one click listener on TextView." /
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
+                    android:hint="@string/page"
                     android:imeOptions="actionGo"
                     android:inputType="number"
                     android:maxLength="4"
@@ -285,7 +286,7 @@ Let’s see one example program for more than one click listener on TextView." /
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text=" / " />
+                    android:text="@string/page_delimiter" />
 
                 <TextView
                     android:id="@id/current_book_book_mode_page_count"

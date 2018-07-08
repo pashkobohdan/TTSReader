@@ -53,7 +53,7 @@ class BookEditDialog(val context: Context, var bookDTO: BookDTO?, val okCallback
         authorEditText.setText(bookDTO?.author)
         val text = bookDTO?.text
         if(text != null) {
-            val cutText = text.subSequence(0, 100)
+            val cutText = if(text.length < 100) text else text.subSequence(0, 100)
             textEditText.setText(cutText)
             textEditText.isEnabled = false
         } else {

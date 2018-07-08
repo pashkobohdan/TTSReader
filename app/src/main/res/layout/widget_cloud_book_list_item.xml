@@ -1,6 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="book"
             type="com.pashkobohdan.ttsreader.data.cloud.model.CloudBookInfo" />
@@ -8,9 +9,9 @@
 
     <LinearLayout
         style="@style/ListItem"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,20 +42,21 @@
                     android:text="@{book.name}" />
 
                 <LinearLayout
-                    android:layout_gravity="right"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end">
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/showInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show info"/>
+                        android:text="@string/show_info" />
+
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/download"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Download"/>
+                        android:text="@string/download" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -63,6 +65,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#d7d7d7"/>
+            android:background="#d7d7d7" />
     </LinearLayout>
 </layout>

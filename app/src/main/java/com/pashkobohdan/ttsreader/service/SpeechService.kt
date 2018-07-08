@@ -20,12 +20,14 @@ import com.pashkobohdan.ttsreader.data.executors.book.GetBookByIdUseCase
 import com.pashkobohdan.ttsreader.data.executors.book.UpdateBookInfoUseCase
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.data.model.utils.ReadingText
+import com.pashkobohdan.ttsreader.data.storage.UserStorage
 import com.pashkobohdan.ttsreader.data.usecase.observers.DefaultObserver
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity
 import com.pashkobohdan.ttsreader.utils.Constants
 import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.listeners.EmptyUtteranceProgressListener
+import java.util.*
 import javax.inject.Inject
 
 class SpeechService : Service(), TtsListener {
@@ -34,6 +36,8 @@ class SpeechService : Service(), TtsListener {
     lateinit var getBookListUseCase: GetBookByIdUseCase
     @Inject
     lateinit var updateBookInfoUseCase: UpdateBookInfoUseCase
+    @Inject
+    lateinit var userStorage: UserStorage
 
     private lateinit var bookDTO: BookDTO
     private var bookId: Long = -1
@@ -144,8 +148,6 @@ class SpeechService : Service(), TtsListener {
 
         val mBuilder = NotificationCompat.Builder(this, NOTOFICATION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Title")
-                .setContentText("Text")
                 .setCustomContentView(remoteViews)
                 .setCustomBigContentView(remoteViews)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -200,6 +202,8 @@ class SpeechService : Service(), TtsListener {
             } else {
                 serviceSuccessInited = true
                 okCallback()
+                val locale = userStorage.getCurrentReadingLanguage()
+                locale?.let { textToSpeech.language = it }
             }
         })
         textToSpeech.setOnUtteranceProgressListener(object : EmptyUtteranceProgressListener() {
@@ -208,7 +212,7 @@ class SpeechService : Service(), TtsListener {
             }
 
             override fun onError(utteranceId: String?, errorCode: Int) {
-                textReadingError()
+                doWithHandler(textReadingError)
             }
         })
     }
@@ -229,6 +233,25 @@ class SpeechService : Service(), TtsListener {
             playCallback()
         } else {
             pauseCallback()
+        }
+    }
+
+    override fun getAvailableLanguages(): List<Locale>? {
+        return if (serviceSuccessInited) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                textToSpeech.availableLanguages.toList()
+            } else {
+                Locale.getAvailableLocales().toList()
+            }
+        } else {
+            null
+        }
+    }
+
+    override fun changeReadingLanguage(locale: Locale) {
+        userStorage.setCurrentReadingLanguage(locale)
+        if (serviceSuccessInited) {
+            textToSpeech.language = locale
         }
     }
 
@@ -313,7 +336,7 @@ class SpeechService : Service(), TtsListener {
             if (pageInTextIndex.equals(text.size - 1)) {
                 //end of book
                 pause()
-                endOfTextCallback()
+                doWithHandler(endOfTextCallback)
             } else {
                 //go to next page
                 readingPosition++
@@ -357,6 +380,10 @@ class SpeechService : Service(), TtsListener {
         saveCurrentBookInfo()
     }
 
+    private fun doWithHandler(doThat: () -> Unit) {
+        handler.post { doThat() }
+    }
+
     private fun isBookEmpty(): Boolean {
         if (text.isEmpty() || text[0].isEmpty() || text[0][0].isEmpty()) {
             return true
@@ -365,7 +392,7 @@ class SpeechService : Service(), TtsListener {
     }
 
     override fun currentPageSelected(page: Int) {
-        if(readingState == BookPresenter.READING_STATE.READING) {
+        if (readingState == BookPresenter.READING_STATE.READING) {
             pause()
             currentPage = text[page]
             readingPosition = TextSplitter.getProgressByCurrentPage(bookDTO, page)
@@ -398,7 +425,7 @@ class SpeechService : Service(), TtsListener {
 
     override fun resume() {
         readingState = BookPresenter.READING_STATE.READING
-        playCallback()
+        doWithHandler(playCallback)
         updateNotification()
         speechCurrentSentence()
     }
@@ -411,7 +438,7 @@ class SpeechService : Service(), TtsListener {
 
     override fun pause() {
         readingState = BookPresenter.READING_STATE.PAUSE
-        pauseCallback()
+        doWithHandler(pauseCallback)
         if (isNotificationShowed) updateNotification()
 
         if (textToSpeech.isSpeaking) {
@@ -430,7 +457,7 @@ class SpeechService : Service(), TtsListener {
     override fun changeBookInfo(speechRate: Int, pitchRate: Int) {
         this.speechRate = speechRate
         this.pitchRate = pitchRate
-        bookInfoCahngeCallback(speechRate, pitchRate)
+        doWithHandler({ bookInfoCahngeCallback(speechRate, pitchRate) })
     }
 
     override fun onDestroy() {

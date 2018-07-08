@@ -6,6 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.common.AbstractScreenView
 import com.pashkobohdan.ttsreader.utils.TextSplitter
+import java.util.*
 
 @StateStrategyType(SkipStrategy::class)
 interface BookView : AbstractScreenView<BookPresenter> {
@@ -55,4 +56,8 @@ interface BookView : AbstractScreenView<BookPresenter> {
     fun showEndOfBookAlert()
 
     fun showStartOfBookAlert()
+
+    fun shoNoAvailableLanguagesError()
+
+    fun showSelectLanguageDialog(languages: List<Locale>)
 }

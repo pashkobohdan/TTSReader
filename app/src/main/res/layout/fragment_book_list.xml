@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <include layout="@layout/header_layout" />
@@ -20,52 +20,48 @@
 
         <LinearLayout
             android:id="@+id/bookListContainer"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/book_list_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/widget_book_list_item"
                 android:background="@color/book_list_listView_background"
                 android:paddingBottom="@dimen/list_vertical_margin"
-                android:paddingTop="@dimen/list_vertical_margin" />
+                android:paddingTop="@dimen/list_vertical_margin"
+                tools:listitem="@layout/widget_book_list_item" />
         </LinearLayout>
 
-        <FrameLayout
+
+        <LinearLayout
             android:id="@+id/noDataContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:orientation="vertical"
+                android:src="@drawable/empty_book_list" />
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:src="@drawable/empty_book_list"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
-                <TextView
-                    android:layout_gravity="center"
-                    android:text="You haven't any book"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </FrameLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/you_haven_t_any_book" />
+        </LinearLayout>
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/add_book_fab_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             fab:menu_animationDelayPerItem="50"
@@ -96,7 +92,8 @@
             fab:menu_shadowRadius="2dp"
             fab:menu_shadowXOffset="1dp"
             fab:menu_shadowYOffset="1dp"
-            fab:menu_showShadow="true">
+            fab:menu_showShadow="true"
+            android:layout_marginEnd="10dp">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/add_book_from_file_fab"
@@ -113,10 +110,10 @@
                 android:id="@+id/add_book_create_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/fab_subitem_create_file"
                 fab:fab_colorNormal="@color/book_list_fab_menu_color_normal"
                 fab:fab_colorPressed="@color/book_list_fab_menu_color_pressed"
                 fab:fab_colorRipple="@color/book_list_fab_menu_color_ripple"
-                android:src="@drawable/fab_subitem_create_file"
                 fab:fab_label="@string/add_book_create"
                 fab:fab_size="mini" />
 
@@ -124,10 +121,10 @@
                 android:id="@+id/add_book_download_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/fab_subitem_download_file"
                 fab:fab_colorNormal="@color/book_list_fab_menu_color_normal"
                 fab:fab_colorPressed="@color/book_list_fab_menu_color_pressed"
                 fab:fab_colorRipple="@color/book_list_fab_menu_color_ripple"
-                android:src="@drawable/fab_subitem_download_file"
                 fab:fab_label="@string/add_book_download"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
