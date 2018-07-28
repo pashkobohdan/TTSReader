@@ -1,5 +1,6 @@
 package com.pashkobohdan.ttsreader.data.usecase
 
+import com.crashlytics.android.Crashlytics
 import com.pashkobohdan.ttsreader.data.usecase.scheduler.ThreadPoolScheduler
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,6 +17,9 @@ abstract class AbstractUseCase<T> {
         return observable
                 .subscribeOn(scheduler.getScheduler())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { error ->
+                    Crashlytics.logException(Exception(error))
+                }
                 .subscribeWith(subscriber)
     }
 }

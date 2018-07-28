@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
@@ -63,12 +64,15 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    api 'com.android.support:multidex:1.0.1'
+
     //    JUnit, Mockito
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:1.10.19'
 
     //    Support library (recycler view, coordinator layout, etc)
     api 'com.android.support:appcompat-v7:27.1.1'
+    api "com.android.support:customtabs:27.1.1"
     api 'com.android.support:design:27.1.1'
     api 'com.android.support:appcompat-v7:27.1.1'
     api 'com.android.support:recyclerview-v7:27.1.1'
@@ -77,10 +81,10 @@ dependencies {
     //    Data binding
     //    apply plugin: 'com.android.databinding'
     //    moxy (mvp)
-    api'com.arello-mobile:moxy:1.5.3'
+    api 'com.arello-mobile:moxy:1.5.3'
     kapt 'com.arello-mobile:moxy-compiler:1.5.3'
-    api'com.arello-mobile:moxy-android:1.5.3'
-    api'com.arello-mobile:moxy-app-compat:1.5.3'
+    api 'com.arello-mobile:moxy-android:1.5.3'
+    api 'com.arello-mobile:moxy-app-compat:1.5.3'
 
     //    cicerone (navigation)
     api 'ru.terrakok.cicerone:cicerone:1.0'
@@ -92,14 +96,14 @@ dependencies {
     api 'javax.inject:javax.inject:1'
 
     //    butterknife (ui binding)
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    api 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //    RxJava
     api 'io.reactivex:rxjava:1.1.6'
-    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.17'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
 //    api 'io.reactivex.rxjava2:rxjava:2.1.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
 
     //    Multi FAB
     api 'com.github.clans:fab:1.6.4'
@@ -111,17 +115,14 @@ dependencies {
 
     api 'org.jsoup:jsoup:1.11.3'
 
-
-    api 'com.android.support:multidex:1.0.3'
-
-    implementation "android.arch.persistence.room:runtime:1.1.1"
+    api "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
-    api"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-//    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.1'
-//    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    api 'com.google.firebase:firebase-database:16.0.1'
 
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    api 'com.google.android.gms:play-services-ads:15.0.1'
+
+    api 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 }
 apply plugin: 'com.google.gms.google-services'
