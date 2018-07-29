@@ -152,4 +152,24 @@ public class BookDTO extends CommonDTO {
     public void setReadingPitch(Integer readingPitch) {
         this.readingPitch = readingPitch;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BookDTO bookDTO = (BookDTO) o;
+
+        if (name != null ? !name.equals(bookDTO.name) : bookDTO.name != null) return false;
+        if (author != null ? !author.equals(bookDTO.author) : bookDTO.author != null) return false;
+        return text != null ? text.equals(bookDTO.text) : bookDTO.text == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        return result;
+    }
 }

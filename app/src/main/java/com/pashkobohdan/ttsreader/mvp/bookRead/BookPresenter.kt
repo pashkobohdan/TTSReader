@@ -5,7 +5,8 @@ import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
 import com.pashkobohdan.ttsreader.service.TtsListener
-import com.pashkobohdan.ttsreader.utils.TextSplitter
+import com.pashkobohdan.ttsreader.service.readingData.ReadingData
+import com.pashkobohdan.ttsreader.service.readingData.ReadingText
 import java.util.*
 import javax.inject.Inject
 
@@ -19,13 +20,12 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
 
     private var bookId: Long = 0
     lateinit var bookDto: BookDTO
+    lateinit var readingText: ReadingText
+
     private var readingSpeed: Int = 100
     private var readingPitch: Int = 100
 
     private var service: TtsListener? = null
-
-
-    lateinit var bookPageInfo: TextSplitter.Companion.BookPagesInfo
 
     fun init(bookId: Long) {
         this.bookId = bookId
@@ -40,9 +40,10 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
     fun serviceCreated(service: TtsListener) {
         this.service = service
         viewState.showProgress()
-        service.loadBook(bookId, {
-            this.bookDto = it
-            viewState.setBookTitle(it.name)
+        service.loadBook(bookId, { book, readingText ->
+            this.bookDto = book
+            this.readingText = readingText
+            viewState.setBookTitle(book.name)
             service.init({
                 ttsReaderInitSuccessfully()
                 service.setTextReadingListener({
@@ -127,8 +128,8 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
     fun startBookPageMode() {
         currentMode = PAGES_MODE
         viewState.startPagesMode()
-        this.bookPageInfo = TextSplitter.readPagesText(bookDto)
-        viewState.setPagesText(bookPageInfo)
+        val readingPage = ReadingData.getPageBySentenceIndex(readingText, bookDto.progress)
+        viewState.setPagesText(readingText, readingPage)
     }
 
     fun endBookPageMode() {
@@ -136,23 +137,24 @@ class BookPresenter @Inject constructor() : AbstractPresenter<BookView>() {
         viewState.endPagesMode()
     }
 
-    fun pageSelected(page: Int) {
-        goToPage(page)
+    fun pageSelected(pageIndex: Int) {
+        goToPage(pageIndex)
         endBookPageMode()
-        service?.currentPageSelected(getPageNumberInBounds(page))
+        val boundedPageIndex = getPageNumberInBounds(pageIndex)
+        service?.currentPageSelected(readingText.pages[boundedPageIndex])
     }
 
-    fun goToPage(page: Int) {
-        viewState.selectPage(getPageNumberInBounds(page))
+    fun goToPage(pageIndex: Int) {
+        viewState.selectPage(getPageNumberInBounds(pageIndex))
     }
 
-    private fun getPageNumberInBounds(page: Int): Int {
-        if (page < 1) {
+    private fun getPageNumberInBounds(pageIndex: Int): Int {
+        if (pageIndex < 1) {
             return 0
-        } else if (page > bookPageInfo.text.size) {
-            return bookPageInfo.text.size - 1
+        } else if (pageIndex > readingText.pages.size) {
+            return readingText.pages.size - 1
         } else {
-            return page - 1
+            return pageIndex - 1
         }
     }
 

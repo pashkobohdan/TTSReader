@@ -1,7 +1,6 @@
-// Top-level build file where you can adcompile 'com.google.firebase:firebase-core:16.0.0'd configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.30'
+    ext.kotlin_version = '1.2.51'
     repositories {
         mavenCentral()
         jcenter()

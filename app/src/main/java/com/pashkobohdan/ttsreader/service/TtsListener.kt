@@ -1,7 +1,9 @@
 package com.pashkobohdan.ttsreader.service
 
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
-import com.pashkobohdan.ttsreader.data.model.utils.ReadingText
+import com.pashkobohdan.ttsreader.data.model.utils.ReadingPieceText
+import com.pashkobohdan.ttsreader.service.readingData.ReadingPage
+import com.pashkobohdan.ttsreader.service.readingData.ReadingText
 import java.util.*
 
 interface TtsListener {
@@ -9,12 +11,12 @@ interface TtsListener {
     fun init(okCallback: () -> Unit, errorCallback: () -> Unit)
 
     fun loadBook(bookId: Long,
-                 loadOkCallback: (BookDTO) -> Unit,
+                 loadOkCallback: (BookDTO, ReadingText) -> Unit,
                  loadErrorCallback: () -> Unit,
                  bookEmptyErrorCallback: () -> Unit,
                  bookInfoCahngeCallback: (Int, Int) -> Unit)
 
-    fun setTextReadingListener(textChange: (ReadingText) -> Unit,
+    fun setTextReadingListener(textChange: (ReadingPieceText) -> Unit,
                                playCallback: () -> Unit,
                                pauseCallback: () -> Unit,
                                textReadingError: () -> Unit,
@@ -26,7 +28,7 @@ interface TtsListener {
 
     fun changeBookInfo(speechRate: Int, pitchRate: Int)
 
-    fun currentPageSelected(page: Int)
+    fun currentPageSelected(page: ReadingPage)
 
     fun moveToStartOfBook()
 

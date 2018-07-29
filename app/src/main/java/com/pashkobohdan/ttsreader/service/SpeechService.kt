@@ -19,13 +19,16 @@ import com.pashkobohdan.ttsreader.TTSReaderApplication
 import com.pashkobohdan.ttsreader.data.executors.book.GetBookByIdUseCase
 import com.pashkobohdan.ttsreader.data.executors.book.UpdateBookInfoUseCase
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
-import com.pashkobohdan.ttsreader.data.model.utils.ReadingText
+import com.pashkobohdan.ttsreader.data.model.utils.ReadingPieceText
 import com.pashkobohdan.ttsreader.data.storage.UserStorage
 import com.pashkobohdan.ttsreader.data.usecase.observers.DefaultObserver
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
+import com.pashkobohdan.ttsreader.service.readingData.ReadingData
+import com.pashkobohdan.ttsreader.service.readingData.ReadingPage
+import com.pashkobohdan.ttsreader.service.readingData.ReadingSentence
+import com.pashkobohdan.ttsreader.service.readingData.ReadingText
 import com.pashkobohdan.ttsreader.ui.activities.MainActivity
 import com.pashkobohdan.ttsreader.utils.Constants
-import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.listeners.EmptyUtteranceProgressListener
 import java.util.*
 import javax.inject.Inject
@@ -42,14 +45,13 @@ class SpeechService : Service(), TtsListener {
     private lateinit var bookDTO: BookDTO
     private var bookId: Long = -1
     private var readingState: BookPresenter.READING_STATE = BookPresenter.READING_STATE.PAUSE
-    private var readingPosition: Int = 0
 
-    private lateinit var text: List<List<String>>
-    private lateinit var currentPage: List<String>
-    private lateinit var currentSentence: String
+    private lateinit var readingText: ReadingText
+    private lateinit var readingPage: ReadingPage
+    private lateinit var readingSentence: ReadingSentence
 
     private lateinit var textToSpeech: TextToSpeech
-    private var textChange: (ReadingText) -> Unit = {}
+    private var textChange: (ReadingPieceText) -> Unit = {}
     private var playCallback: () -> Unit = {}
     private var pauseCallback: () -> Unit = {}
     private var textReadingError: () -> Unit = {}
@@ -217,7 +219,7 @@ class SpeechService : Service(), TtsListener {
         })
     }
 
-    override fun setTextReadingListener(textChange: (ReadingText) -> Unit,
+    override fun setTextReadingListener(textChange: (ReadingPieceText) -> Unit,
                                         playCallback: () -> Unit,
                                         pauseCallback: () -> Unit,
                                         textReadingError: () -> Unit,
@@ -262,7 +264,7 @@ class SpeechService : Service(), TtsListener {
         }
     }
 
-    override fun loadBook(bookId: Long, loadOkCallback: (BookDTO) -> Unit,
+    override fun loadBook(bookId: Long, loadOkCallback: (BookDTO, ReadingText) -> Unit,
                           loadErrorCallback: () -> Unit,
                           bookEmptyErrorCallback: () -> Unit,
                           bookInfoCahngeCallback: (Int, Int) -> Unit) {
@@ -276,18 +278,18 @@ class SpeechService : Service(), TtsListener {
 
                 override fun onNext(response: BookDTO) {
                     bookDTO = response
-                    text = TextSplitter.readPages(bookDTO)
-
-                    readingPosition = response.progress
                     speechRate = response.readingSpeed
                     pitchRate = response.readingPitch
+
+                    readingText = ReadingData.readBook(bookDTO)
+
                     bookInfoCahngeCallback(speechRate, pitchRate)
 
                     if (isBookEmpty()) {
                         bookEmptyErrorCallback()
                     } else {
                         initStartPageAndSentence()
-                        loadOkCallback(bookDTO)
+                        loadOkCallback(bookDTO, readingText)
                     }
                 }
 
@@ -297,82 +299,80 @@ class SpeechService : Service(), TtsListener {
             })
         } else {
             //book is already loaded
+            readingText = ReadingData.readBook(bookDTO)
             bookInfoCahngeCallback(speechRate, pitchRate)
             initStartPageAndSentence()
-            loadOkCallback(bookDTO)
+            loadOkCallback(bookDTO, readingText)
         }
     }
 
     fun back() {
-        val sentenceInPageIndex = currentPage.indexOf(currentSentence)
+        val sentenceInPageIndex = readingPage.sentences.indexOf(readingSentence)
         if (sentenceInPageIndex.equals(0)) {
             //need to change page
-            val pageInTextIndex = text.indexOf(currentPage)
+            val pageInTextIndex = readingText.pages.indexOf(readingPage)
             if (pageInTextIndex.equals(0)) {
                 //start of book
                 pause()
             } else {
                 //go to next page
-                readingPosition--
-                currentPage = text[pageInTextIndex - 1]
-                currentSentence = currentPage[currentPage.size - 1]
+                readingPage = readingText.pages[pageInTextIndex - 1]
+                readingSentence = readingPage.sentences[readingPage.sentences.size - 1]
                 initPageText()
                 if (readingState == BookPresenter.READING_STATE.READING) speechCurrentSentence()
             }
         } else {
             //just next sentence
-            readingPosition--
-            currentSentence = currentPage[sentenceInPageIndex - 1]
+            readingSentence = readingPage.sentences[sentenceInPageIndex - 1]
             initPageText()
             if (readingState == BookPresenter.READING_STATE.READING) speechCurrentSentence()
         }
     }
 
     fun next() {
-        val sentenceInPageIndex = currentPage.indexOf(currentSentence)
-        if (sentenceInPageIndex.equals(currentPage.size - 1)) {
+        val sentenceInPageIndex = readingPage.sentences.indexOf(readingSentence)
+        if (sentenceInPageIndex.equals(readingPage.sentences.size - 1)) {
             //need to change page
-            val pageInTextIndex = text.indexOf(currentPage)
-            if (pageInTextIndex.equals(text.size - 1)) {
+            val pageInTextIndex = readingText.pages.indexOf(readingPage)
+            if (pageInTextIndex.equals(readingText.pages.size - 1)) {
                 //end of book
                 pause()
                 doWithHandler(endOfTextCallback)
             } else {
                 //go to next page
-                readingPosition++
-                currentPage = text[pageInTextIndex + 1]
-                currentSentence = currentPage[0]
+                readingPage = readingText.pages[pageInTextIndex + 1]
+                readingSentence = readingPage.sentences[0]
                 initPageText()
                 if (readingState == BookPresenter.READING_STATE.READING) speechCurrentSentence()
             }
         } else {
             //just next sentence
-            readingPosition++
-            currentSentence = currentPage[sentenceInPageIndex + 1]
+            readingSentence = readingPage.sentences[sentenceInPageIndex + 1]
             initPageText()
             if (readingState == BookPresenter.READING_STATE.READING) speechCurrentSentence()
         }
     }
 
     override fun moveToStartOfBook() {
-        readingPosition = 0
-        currentPage = text[0]
-        currentSentence = currentPage[0]
+        readingPage = readingText.pages[0]
+        readingSentence = readingPage.sentences[0]
         initPageText()
         if (readingState == BookPresenter.READING_STATE.READING) pause()
     }
 
-    private fun findPrevNextAndCurrentText(): ReadingText {
-        val currentSentenceIndex = currentPage.indexOf(currentSentence)
+    private fun findPrevNextAndCurrentText(): ReadingPieceText {
+        val currentSentenceIndex = readingPage.sentences.indexOf(readingSentence)
         val prevText = StringBuilder()
         for (i in 0..(currentSentenceIndex - 1)) {
-            prevText.append(currentPage[i])
+            prevText.append(readingPage.sentences[i].text)
+            prevText.append(" ")
         }
         val nextText = StringBuilder()
-        for (i in (currentSentenceIndex + 1)..(currentPage.size - 1)) {
-            nextText.append(currentPage[i])
+        for (i in (currentSentenceIndex + 1)..(readingPage.sentences.size - 1)) {
+            nextText.append(readingPage.sentences[i].text)
+            prevText.append(" ")
         }
-        return ReadingText(prevText.toString(), currentSentence, nextText.toString())
+        return ReadingPieceText(prevText.toString(), readingSentence, nextText.toString())
     }
 
     private fun initPageText() {
@@ -385,24 +385,22 @@ class SpeechService : Service(), TtsListener {
     }
 
     private fun isBookEmpty(): Boolean {
-        if (text.isEmpty() || text[0].isEmpty() || text[0][0].isEmpty()) {
+        if (readingText.pages.isEmpty() || readingText.pages[0].sentences.isEmpty() || readingText.pages[0].sentences[0].text.isEmpty()) {
             return true
         }
         return false
     }
 
-    override fun currentPageSelected(page: Int) {
+    override fun currentPageSelected(page: ReadingPage) {
         if (readingState == BookPresenter.READING_STATE.READING) {
             pause()
-            currentPage = text[page]
-            readingPosition = TextSplitter.getProgressByCurrentPage(bookDTO, page)
-            currentSentence = currentPage[0]
+            readingPage = page
+            readingSentence = readingPage.sentences[0]
             initPageText()
             resume()
         } else {
-            currentPage = text[page]
-            readingPosition = TextSplitter.getProgressByCurrentPage(bookDTO, page)
-            currentSentence = currentPage[0]
+            readingPage =  page
+            readingSentence = readingPage.sentences[0]
             initPageText()
         }
     }
@@ -410,13 +408,13 @@ class SpeechService : Service(), TtsListener {
     private fun initStartPageAndSentence() {
         val readingProgress = Math.max(bookDTO.progress, 0)
         var sentenceNumber = 0
-        currentPage = text[0]
-        currentSentence = currentPage[0]
-        for (page in text) {
-            for (sentence in page) {
+        readingPage = readingText.pages[0]
+        readingSentence = readingPage.sentences[0]
+        for (page in readingText.pages) {
+            for (sentence in page.sentences) {
                 if (sentenceNumber++.equals(readingProgress)) {
-                    currentSentence = sentence
-                    currentPage = page
+                    readingSentence = sentence
+                    readingPage = page
                     break
                 }
             }
@@ -433,7 +431,7 @@ class SpeechService : Service(), TtsListener {
     private fun speechCurrentSentence() {
         textToSpeech.setSpeechRate(speechRate / DIVIDE_TTS_SPEECH_RATE_BY)
         textToSpeech.setPitch(pitchRate / DIVIDE_TTS_PITCH_RATE_BY)
-        textToSpeech.speak(currentSentence, TextToSpeech.QUEUE_FLUSH, speechParams)
+        textToSpeech.speak(readingSentence.text, TextToSpeech.QUEUE_FLUSH, speechParams)
     }
 
     override fun pause() {
@@ -481,6 +479,7 @@ class SpeechService : Service(), TtsListener {
     }
 
     override fun saveCurrentBookInfo() {
+        val readingPosition = ReadingData.getSentenceIndexInText(readingText, readingSentence)
         bookDTO.progress = readingPosition
         updateBookInfoUseCase.execute(UpdateBookInfoUseCase.BookInfo(bookId, speechRate,
                 pitchRate, readingPosition), object : DefaultObserver<Unit>() {

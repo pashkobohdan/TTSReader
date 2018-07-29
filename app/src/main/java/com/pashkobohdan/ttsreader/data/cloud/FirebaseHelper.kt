@@ -3,9 +3,9 @@ package com.pashkobohdan.ttsreader.data.cloud
 import com.google.firebase.database.*
 import com.pashkobohdan.ttsreader.data.cloud.model.CloudBookInfo
 import com.pashkobohdan.ttsreader.data.model.dto.book.BookDTO
+import com.pashkobohdan.ttsreader.service.readingData.ReadingData
 import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_PITCH_RATE
 import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
-import com.pashkobohdan.ttsreader.utils.TextSplitter
 import java.util.*
 
 
@@ -13,7 +13,7 @@ object FirebaseHelper {
 
     private const val PUBLIC_BOOK_LIST_REF = "publicBooks"
     private const val PUBLIC_BOOK_TEXT_REF = "publicBooksTexts"
-    private const val SHOWABLE_BOOK_TEXT_LENGTH = 400
+    const val SHOWABLE_BOOK_TEXT_LENGTH = 400
 
     private val database: DatabaseReference by lazy {
         FirebaseDatabase.getInstance().getReference()
@@ -33,7 +33,7 @@ object FirebaseHelper {
                 val list = mutableListOf<CloudBookInfo>()
                 for (snap in dataSnapshot.children) {
                     val bookInfo = snap.getValue(CloudBookInfo::class.java)
-                    bookInfo?.let { list.add(it) }
+                    bookInfo?.let { list.add(bookInfo) }
                 }
                 updateListener(list)
             }
@@ -53,7 +53,7 @@ object FirebaseHelper {
 
             override fun onDataChange(p0: DataSnapshot) {
                 val text = p0.value as String
-                val length = TextSplitter.sentencesCount(text)
+                val length = ReadingData.splitToSentences(text).size
                 val bookDto = BookDTO(info.name, info.author,
                         text, length, 0, DEFAULT_SPEED_RATE, DEFAULT_PITCH_RATE, Date(), Date())
                 readListener(bookDto)

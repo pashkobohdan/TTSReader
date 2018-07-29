@@ -77,4 +77,7 @@
     <string name="book_text_downloading_error_message">Failure while downloading book text</string>
     <string name="book_save_success_message">Book is saved successfully. Refresh book list</string>
     <string name="book_save_error_message">Failure while saving book</string>
+    <string name="free_version">Free version</string>
+    <string name="free_version_get_pro">In free version you cannot change reading parameters over the special interval</string>
+    <string name="get_pro_version">Get PRO version</string>
 </resources>

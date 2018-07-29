@@ -72,4 +72,7 @@
     <string name="book_text_downloading_error_message">Ошибка зарузки текста книги</string>
     <string name="book_save_success_message">Книга успешно загружена. Обновите список книг</string>
     <string name="book_save_error_message">Ошибка сохранения книги</string>
+    <string name="free_version">Бесплатная версия</string>
+    <string name="get_pro_version">Получить Про версию</string>
+    <string name="free_version_get_pro">В бесплатной версии вы не можете изменять параметры чтения вне заданных пределов</string>
 </resources>

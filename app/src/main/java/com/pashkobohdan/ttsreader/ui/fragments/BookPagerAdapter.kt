@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.pashkobohdan.ttsreader.R
+import com.pashkobohdan.ttsreader.service.readingData.ReadingText
 
-class BookPagerAdapter(val mContext: Context, var text: List<String>) : PagerAdapter() {
+class BookPagerAdapter(val mContext: Context, var text: ReadingText) : PagerAdapter() {
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
-        val page = text[position]
+        val page = text.pages[position]
         val inflater = LayoutInflater.from(mContext)
         val layout = inflater.inflate(R.layout.book_page_layout, collection, false) as ViewGroup
         val pageTestView = layout.findViewById<TextView>(R.id.book_page_text)
-        pageTestView.setText(page)
+        pageTestView.setText(page.text)
         collection.addView(layout)
         return layout
     }
@@ -25,7 +26,7 @@ class BookPagerAdapter(val mContext: Context, var text: List<String>) : PagerAda
     }
 
     override fun getCount(): Int {
-        return text.size
+        return text.pages.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

@@ -67,8 +67,8 @@ class FreeBookFragment : BookFragment() {
     }
 
     private fun showFreeVersionChangeParameters() {
-        DialogUtils.showConfirm("Free version", "In pro version you cannot change this parameters over the special interval",
-                "See PRO version", "Cancel",
+        DialogUtils.showConfirm(getString(R.string.free_version), getString(R.string.free_version_get_pro),
+                getString(R.string.get_pro_version), getString(R.string.cancel),
                 context ?: throw IllegalStateException("Context is null"), {
             openProVersionInGP()
         }, {})

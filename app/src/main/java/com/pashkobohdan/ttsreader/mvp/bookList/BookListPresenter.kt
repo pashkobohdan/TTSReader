@@ -11,11 +11,11 @@ import com.pashkobohdan.ttsreader.data.usecase.observers.DefaultObserver
 import com.pashkobohdan.ttsreader.data.usecase.observers.UnitObserver
 import com.pashkobohdan.ttsreader.mvp.bookList.view.BookListView
 import com.pashkobohdan.ttsreader.mvp.common.AbstractPresenter
+import com.pashkobohdan.ttsreader.service.readingData.ReadingData
 import com.pashkobohdan.ttsreader.ui.PermissionUtil
 import com.pashkobohdan.ttsreader.ui.Screen
 import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_PITCH_RATE
 import com.pashkobohdan.ttsreader.utils.Constants.DEFAULT_SPEED_RATE
-import com.pashkobohdan.ttsreader.utils.TextSplitter
 import com.pashkobohdan.ttsreader.utils.fileSystem.file.InternalStorageFileHelper
 import com.pashkobohdan.ttsreader.utils.fileSystem.newFileOpening.core.BookReadingResult
 import java.io.File
@@ -64,7 +64,7 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
         } else {
             val newBook = BookDTO(bookReadingResult.bookName, bookReadingResult.bookAuthor,
                     bookReadingResult.bookText,
-                    TextSplitter.sentencesCount(bookReadingResult.bookText),
+                    ReadingData.splitToSentences(bookReadingResult.bookText).size,
                     0, DEFAULT_SPEED_RATE, DEFAULT_PITCH_RATE,
                     Date(), Date())
             saveBook(newBook)
@@ -120,8 +120,11 @@ class BookListPresenter @Inject constructor() : AbstractPresenter<BookListView>(
         getBookListUseCase.execute(object : DefaultObserver<List<BookDTO>>() {
 
             override fun onNext(bookDTOs: List<BookDTO>) {
-                bookDTOList = bookDTOs.toMutableList()
-                viewState.showBookList(bookDTOs)
+                /**
+                 * For filter same content books (name, author, text
+                 */
+                bookDTOList = bookDTOs.toSet().toMutableList()
+                viewState.showBookList(bookDTOList)
             }
 
             override fun onError(e: Throwable) {

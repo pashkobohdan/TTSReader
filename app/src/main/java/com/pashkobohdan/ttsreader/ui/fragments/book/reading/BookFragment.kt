@@ -26,12 +26,14 @@ import com.pashkobohdan.ttsreader.TTSReaderApplication
 import com.pashkobohdan.ttsreader.mvp.bookRead.BookPresenter
 import com.pashkobohdan.ttsreader.mvp.bookRead.view.BookView
 import com.pashkobohdan.ttsreader.service.SpeechService
+import com.pashkobohdan.ttsreader.service.readingData.ReadingPage
+import com.pashkobohdan.ttsreader.service.readingData.ReadingSentence
+import com.pashkobohdan.ttsreader.service.readingData.ReadingText
 import com.pashkobohdan.ttsreader.ui.dialog.DialogUtils
 import com.pashkobohdan.ttsreader.ui.fragments.BookPagerAdapter
 import com.pashkobohdan.ttsreader.ui.fragments.common.AbstractScreenFragment
 import com.pashkobohdan.ttsreader.ui.listener.EmptyOnSeekBarChangeListener
 import com.pashkobohdan.ttsreader.utils.Constants
-import com.pashkobohdan.ttsreader.utils.TextSplitter
 import java.util.*
 
 
@@ -212,9 +214,9 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         activity?.startService(ttsIntent)
     }
 
-    override fun setText(beforeText: String, nowReadingText: String, afterText: String) {
+    override fun setText(beforeText: String, readingSentence: ReadingSentence, afterText: String) {
         beforeTextView.setText(beforeText)
-        currentTextView.setText(nowReadingText)
+        currentTextView.setText(readingSentence.text)
         afterTextView.setText(afterText)
     }
 
@@ -255,13 +257,14 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
         readingModeRoot.visibility = View.VISIBLE
     }
 
-    override fun setPagesText(bookPageInfo: TextSplitter.Companion.BookPagesInfo) {
-        currentPageInput.setText((bookPageInfo.currentPage + 1).toString())
+    override fun setPagesText(text: ReadingText, page: ReadingPage) {
+        val readingPageIndex = text.pages.indexOf(page)
+        currentPageInput.setText((readingPageIndex + 1).toString())
 
-        pageCountTextView.setText(bookPageInfo.text.size.toString())
+        pageCountTextView.text = text.pages.size.toString()
         bookModeRoot.adapter = BookPagerAdapter(
                 context ?: throw IllegalStateException("Context is null"),
-                bookPageInfo.text)
+                text)
         bookModeRoot.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
@@ -276,7 +279,7 @@ open class BookFragment : AbstractScreenFragment<BookPresenter>(), BookView {
             }
 
         })
-        bookModeRoot.setCurrentItem(bookPageInfo.currentPage)
+        bookModeRoot.setCurrentItem(readingPageIndex)
     }
 
     override fun showEmptyBookError() {
